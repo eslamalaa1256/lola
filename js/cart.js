@@ -3,6 +3,7 @@ const db = firebase.firestore();
 // auth is already declared in js/header.js
 
 let currentUser = null;
+let cartItems = []; // متغير محلي للسلة
 
 const cartItemsEl = document.getElementById("cartItems");
 const cartSummaryEl = document.getElementById("cartSummary");
@@ -116,8 +117,8 @@ function showLoadingSkeletons() {
 async function loadCart() {
   showLoadingSkeletons();
   try {
-    const cart = await getCartItems();
-    displayCart(cart);
+    cartItems = await getCartItems();
+    displayCart(cartItems);
   } catch (error) {
     console.error("❌ خطأ في تحميل السلة:", error);
     cartItemsEl.innerHTML = "<p>⚠️ خطأ في التحميل</p>";
@@ -247,20 +248,12 @@ function handlePlus(itemId, btn) {
 // ============================
 async function updateQty(itemId, newQty) {
   try {
-    const cart = await getCartItems();
-    const item = cart.find(i => i.cartItemId == itemId);
+    cartItems = await getCartItems();
+    const item = cartItems.find(i => i.cartItemId == itemId);
     if (item) {
       item.quantity = newQty;
       await saveCartItem(itemId, item);
-
-      const itemDiv = [...cartItemsEl.children].find(div => div.dataset.itemId == itemId);
-      if (itemDiv) {
-        itemDiv.querySelector(".quantity-display").innerText = newQty;
-        itemDiv.querySelector(".item-total").innerText = (item.price + (item.giftWrapping ? 20 : 0)) * newQty;
-      }
-
-      updateCartSummary(cart);
-      updateCartCount();
+      displayCart(cartItems);
       showToast('تم تحديث الكمية بنجاح', 'success');
     }
   } catch (error) {
@@ -278,7 +271,8 @@ async function removeFromCart(itemId, btn) {
   itemDiv.style.opacity = "0";
   setTimeout(async () => {
     await removeCartItem(itemId);
-    loadCart();
+    cartItems = await getCartItems();
+    displayCart(cartItems);
     showToast('تم حذف المنتج من السلة', 'success');
   }, 300);
 }
@@ -343,13 +337,14 @@ async function saveWishlistItem(itemId, item) {
 
 async function moveToWishlist(itemId, btn) {
   try {
-    const cart = await getCartItems();
-    const item = cart.find(i => i.id === itemId);
+    cartItems = await getCartItems();
+    const item = cartItems.find(i => i.id === itemId);
     if (item) {
       await saveWishlistItem(itemId, item);
       await removeCartItem(itemId);
+      cartItems = await getCartItems();
+      displayCart(cartItems);
       showToast('تم نقل المنتج للمفضلة', 'success');
-      loadCart();
       loadWishlistCount();
     }
   } catch (error) {
