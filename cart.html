@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلة التسوق - LOLA</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/cart.css">
+</head>
+
+<body>
+    <!-- ================= Header ================= -->
+   <header class="top-bar">
+        <div class="header-main">
+      <a href="index.html" class="logo">LOLA</a>
+      <div class="nav-actions">
+        <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+        </a>
+        <a href="profile.html" id="userIcon" class="profile-icon" style="display:none;" aria-label="الملف الشخصي">
+          <i class="fas fa-user-circle"></i>
+        </a>
+        <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
+          <i class="fas fa-heart"></i>
+          <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
+        </a>
+        <a href="login.html" id="loginBtn" class="login-btn" aria-label="تسجيل الدخول">
+  <i class="fas fa-user"></i>
+</a>
+
+        <a href="admin-login.html" id="adminLink" class="admin-link" style="display:none;">إدارة</a>
+      </div>
+    </div>
+    </header>
+
+    <!-- ================= Main ================= -->
+    <main>
+        <div class="cart-container" id="cartItems"></div>
+        <div class="cart-total" id="cartSummary"></div>
+
+        <div class="discount-section">
+            <div class="discount-wrapper">
+                <input type="text" id="discountCode" placeholder="أدخل كود الخصم" />
+                <button class="discount-btn" onclick="applyDiscount()">تطبيق</button>
+            </div>
+            <p id="discountMessage" class="discount-message"></p>
+        </div>
+
+        <button class="checkout-btn" onclick="checkout()">إتمام الشراء</button>
+    </main>
+
+    <!-- ================= Footer ================= -->
+    <footer>
+        <div>© 2025 xcode جميع الحقوق محفوظة.</div>
+        <div>
+            <a href="about.html">عنّا</a> |
+            <a href="contact.html">تواصل معنا</a> |
+            <a href="privacy.html">سياسة الخصوصية</a> |
+            <a href="Terms of Use.html">شروط الاستخدام</a>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCEY3tkYgxiRRpcOLdx8gRP0uwkaD1sIJQ",
+        authDomain: "lola-6ab46.firebaseapp.com",
+        projectId: "lola-6ab46",
+        storageBucket: "lola-6ab46.appspot.com",
+        messagingSenderId: "166549966504",
+        appId: "1:166549966504:web:4f52282d3fa4a9f0eabc9d"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+    </script>
+
+    <script src="js/header.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+</html>

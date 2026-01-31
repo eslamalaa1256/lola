@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOLA | الصفحة الرئيسية</title>
+
+  <!-- أيقونات Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- ملف التنسيق -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    html { scroll-behavior: smooth; }
+    /* تحسين عرض الشبكة */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+      padding: 20px;
+    }
+
+    .product-card {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+      display: block;
+    }
+
+    .product-card h3 {
+      margin: 12px 16px 8px 16px;
+      font-size: 1.2rem;
+      color: #222;
+    }
+
+    .product-card p.price {
+      margin: 0 16px 16px 16px;
+      font-weight: 700;
+      color: #007bff;
+      font-size: 1.1rem;
+    }
+
+    /* Loading spinner */
+    #loadingSpinner {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+    #loadingSpinner.active {
+      display: block;
+    }
+    #loadingSpinner i {
+      font-size: 2rem;
+      color: #007bff;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+  </style>
+</head>
+<body>
+  <!-- الشريط العلوي -->
+  <header class="top-bar">
+    <div class="header-main">
+        <a href="index.html" class="logo">LOLA</a>
+        <div class="nav-actions">
+          <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+          </a>
+          <a href="profile.html" id="userIcon" class="profile-icon" style="display:none;" aria-label="الملف الشخصي">
+            <i class="fas fa-user-circle"></i>
+          </a>
+          <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
+            <i class="fas fa-heart"></i>
+            <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
+          </a>
+          <a href="login.html" id="loginBtn" class="login-btn" aria-label="تسجيل الدخول">
+    <i class="fas fa-user"></i>
+  </a>
+  
+          <a href="admin-login.html" id="adminLink" class="admin-link" style="display:none;">إدارة</a>
+        </div>
+      </div>
+  
+
+    <div class="header-filters" id="headerFilters" role="region" aria-label="فلاتر المنتجات">
+      <div class="filters" role="list">
+        <button class="filter-btn active" data-category="all" role="listitem" aria-pressed="true">الكل</button>
+        <button class="filter-btn" data-category="أحذية" role="listitem" aria-pressed="false">أحذية</button>
+        <button class="filter-btn" data-category="ملابس" role="listitem" aria-pressed="false">ملابس</button>
+        <button class="filter-btn" data-category="اكسسوارات" role="listitem" aria-pressed="false">اكسسوارات</button>
+        <button class="filter-btn" data-sort="price-asc" role="listitem" aria-pressed="false">السعر: من الأقل للأعلى</button>
+        <button class="filter-btn" data-sort="price-desc" role="listitem" aria-pressed="false">السعر: من الأعلى للأقل</button>
+      </div>
+      <div class="header-search-filter">
+        <input type="search" id="search-filter" placeholder="ابحث عن منتج معين..." aria-label="بحث عن منتج" />
+      </div>
+    </div>
+
+    <button class="filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="headerFilters">
+      <i class="fas fa-filter"></i> فلاتر
+    </button>
+  </header>
+
+  <!-- رأس الصفحة -->
+  <section class="products-header">
+    <h1>كل المنتجات</h1>
+    <p>تسوق تشكيلتنا الكاملة من الملابس والأحذية</p>
+  </section>
+
+  <!-- محتوى المنتجات -->
+  <main>
+    <div id="loadingSpinner" role="status" aria-live="polite" aria-label="جارٍ تحميل المنتجات">
+      <i class="fas fa-spinner"></i>
+    </div>
+    <div class="product-grid" id="product-grid" aria-live="polite" aria-relevant="additions">
+      <!-- سيتم ملؤها ديناميكيًا من لوحة الإدارة -->
+    </div>
+  </main>
+
+  <!-- أزرار وتحكم -->
+  <button class="back-to-top" id="backToTop" aria-label="العودة إلى الأعلى">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
+  <!-- تذييل الصفحة -->
+  <footer>
+    <div>© 2025 XCODE جميع الحقوق محفوظة.</div>
+    <div>
+      <a href='about.html'>عنّا</a> |
+      <a href='contact.html'>تواصل معنا</a> |
+      <a href='privacy.html'>سياسة الخصوصية</a> |
+      <a href="Terms of Use.html">شروط الاستخدام</a>
+    </div>
+    <!-- Social Links -->
+    <div class="social-links">
+        <a href="#" target="_blank" title="Facebook">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://www.instagram.com/lo.la.st/?next=%2F&hl=en" target="_blank" title="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" target="_blank" title="TikTok">
+            <i class="fab fa-tiktok"></i>
+        </a>
+    </div>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- Firebase Config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEY3tkYgxiRRpcOLdx8gRP0uwkaD1sIJQ",
+      authDomain: "lola-6ab46.firebaseapp.com",
+      projectId: "lola-6ab46",
+      storageBucket: "lola-6ab46.appspot.com",
+      messagingSenderId: "166549966504",
+      appId: "1:166549966504:web:4f52282d3fa4a9f0eabc9d"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/header.js"></script>
+  <script defer src="js/main.js"></script>
+

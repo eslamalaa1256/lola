@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>LOLA - تسجيل الدخول / تسجيل</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="تسجيل الدخول أو إنشاء حساب جديد في LOLA. استمتع بتجربة تسوق سهلة وآمنة مع خصومات حصرية.">
+<meta name="keywords" content="LOLA, تسجيل الدخول, حساب, تسوق, خصومات, متجر إلكتروني">
+<meta name="author" content="LOLA">
+<link rel="icon" href="assets/images/LOLA.PNG" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="css/login.css">
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<!-- Firebase Config -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCEY3tkYgxiRRpcOLdx8gRP0uwkaD1sIJQ",
+    authDomain: "lola-6ab46.firebaseapp.com",
+    projectId: "lola-6ab46",
+    storageBucket: "lola-6ab46.appspot.com",
+    messagingSenderId: "166549966504",
+    appId: "1:166549966504:web:4f52282d3fa4a9f0eabc9d"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+</script>
+
+<script src="js/header.js" defer></script>
+
+</head>
+
+<body>
+<header class="top-bar">
+  <div class="header-main">
+    <a href="index.html" class="logo">LOLA</a>
+    <div class="nav-actions">
+      <button id="darkModeToggle" class="btn-icon" title="تبديل الوضع المظلم"><i class="fas fa-moon"></i></button>
+      <button id="langToggle" class="btn-icon" title="تبديل اللغة">EN</button>
+    </div>
+  </div>
+</header>
+
+<section class="auth">
+  <div class="auth-toggle">
+    <button id="loginTab" class="active">تسجيل الدخول</button>
+    <button id="signupTab">إنشاء حساب</button>
+  </div>
+
+  <h2 id="authTitle">تسجيل الدخول</h2>
+  <div class="coupon" id="couponBox">🎁 استمتع بخصومات خاصة</div>
+
+  <div class="country">
+    <label>البلد:</label>
+    <select id="country">
+      <option value="(ام الدنيا)مصر">(ام الدنيا)مصر</option>
+      <option value="قطر">قطر</option>
+      <option value="السعودية">السعودية</option>
+      <option value="الإمارات">الإمارات</option>
+      <option value="الكويت">الكويت</option>
+      <option value="البحرين">البحرين</option>
+      <option value="الأردن">الأردن</option>
+    </select>
+  </div>
+
+  <!-- ===== LOGIN SECTION ===== -->
+  <div id="loginFields">
+    <div class="auth-method">
+      <label><input type="radio" name="loginMethod" value="email" checked> البريد الإلكتروني</label>
+      <label><input type="radio" name="loginMethod" value="phone"> رقم الهاتف</label>
+    </div>
+
+    <div id="emailRow">
+      <div class="input-container">
+        <i class="fas fa-envelope input-icon"></i>
+        <input id="emailInput" class="input with-icon" type="email" placeholder="أدخل بريدك">
+      </div>
+      <div class="row">
+        <div class="input-container" style="flex:1;">
+          <i class="fas fa-lock input-icon"></i>
+          <input id="password" class="input with-icon" type="password" placeholder="كلمة المرور" style="flex:1;">
+        </div>
+        <button id="togglePw" class="btn btn-social tooltip" style="width:120px;">👁️
+          <span class="tooltiptext">إظهار/إخفاء كلمة المرور</span>
+        </button>
+      </div>
+      <div class="password-strength"><div id="strengthFill" class="strength-fill"></div></div>
+      <div class="remember-me">
+        <input type="checkbox" id="rememberMe">
+        <label for="rememberMe">تذكرني</label>
+      </div>
+      <span class="forgot-link" id="forgotPw" role="button">نسيت كلمة المرور؟</span>
+    </div>
+
+    <div id="phoneRow" class="hidden">
+      <div class="input-container">
+        <i class="fas fa-phone input-icon"></i>
+        <input id="phoneInput" class="input with-icon" type="tel" placeholder="+201234567890">
+      </div>
+      <button id="sendOtp" class="btn btn-primary">إرسال كود SMS</button>
+      <div id="otpArea" class="hidden" style="margin-top:8px;">
+        <div class="input-container">
+          <i class="fas fa-key input-icon"></i>
+          <input id="smsCode" class="input with-icon" placeholder="أدخل كود الـ SMS">
+        </div>
+        <button id="confirmOtpBtn" class="btn btn-primary">تأكيد الكود</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SIGNUP SECTION ===== -->
+  <div id="signupFields" class="hidden">
+    <div class="auth-method">
+      <label><input type="radio" name="signupMethod" value="email" checked> البريد الإلكتروني</label>
+      <label><input type="radio" name="signupMethod" value="phone"> رقم الهاتف</label>
+    </div><div class="input-container">
+      <i class="fas fa-user input-icon"></i>
+      <input id="nameInput" class="input with-icon" type="text" placeholder="الاسم الكامل">
+    </div>
+    
+
+    <!-- signup with email -->
+    <div id="signupEmailBox">
+      <div class="profile-pic" id="profilePicSection" style="display: none;">
+        <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+      </div>
+      <div class="input-container">
+        <i class="fas fa-envelope input-icon"></i>
+        <input id="emailSignup" class="input with-icon" type="email" placeholder="أدخل بريدك">
+      </div>
+      <div class="input-container">
+        <i class="fas fa-lock input-icon"></i>
+        <input id="passwordSignup" class="input with-icon" type="password" placeholder="كلمة المرور">
+      </div>
+      <div class="password-strength"><div id="strengthFillSignup" class="strength-fill"></div></div>
+      <div class="input-container">
+        <i class="fas fa-lock input-icon"></i>
+        <input id="confirmPassword" class="input with-icon" type="password" placeholder="تأكيد كلمة المرور">
+      </div>
+      <div class="terms">
+        <input type="checkbox" id="acceptTerms">
+        <label for="acceptTerms">أوافق على <a href="terms-of-use.html" target="_blank">شروط الاستخدام</a> و <a href="privacy.html" target="_blank">سياسة الخصوصية</a></label>
+      </div>
+      
+    </div>
+
+    <!-- signup with phone -->
+    <div id="signupPhoneRow" class="hidden">
+      <div class="input-container">
+        <i class="fas fa-phone input-icon"></i>
+        <input id="signupPhoneInput" class="input with-icon" type="tel" placeholder="+201234567890">
+      </div>
+      <button id="signupSendOtp" class="btn btn-primary">إرسال كود SMS</button>
+      <div id="signupOtpArea" class="hidden" style="margin-top:8px;">
+        <div class="input-container">
+          <i class="fas fa-key input-icon"></i>
+          <input id="signupSmsCode" class="input with-icon" placeholder="أدخل كود الـ SMS">
+        </div>
+        <button id="signupConfirmOtpBtn" class="btn btn-primary">تأكيد الكود</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">أو</div>
+  <button id="googleBtn" class="btn btn-social">متابعة Google</button>
+  <button id="facebookBtn" class="btn btn-social">متابعة Facebook</button>
+  <button id="continueBtn" class="btn btn-primary">متابعة</button>
+</section>
+
+<div id="errorArea" class="error-message hidden"></div>
+<div id="captchaContainer"></div>
+<div class="progress-bar"><div id="progressFill"></div></div>
+
+<div id="forgotModal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <h2>إعادة تعيين كلمة المرور</h2>
+    <div class="input-container">
+      <i class="fas fa-envelope input-icon"></i>
+      <input id="resetEmail" class="input with-icon" type="email" placeholder="أدخل بريدك الإلكتروني">
+    </div>
+    <button id="resetPwBtn" class="btn btn-primary">إرسال رابط إعادة التعيين</button>
+  </div>
+</div>
+
+<footer>
+  <div>© 2025 xcode جميع الحقوق محفوظة.</div>
+</footer>
+</body>
+</html>
+
+
+  <script src="js/login.js" defer></script>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOLA | إنهاء الطلب</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+body{background:#f8f8f8;color:#333;line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+.top-bar{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:15px 30px;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;top:0;z-index:1000;}
+.logo{font-size:28px;font-weight:bold;color:#000;letter-spacing:1px;}
+.nav-actions{display:flex;align-items:center;gap:20px;}
+.nav-actions a{font-weight:600;transition:color 0.3s;padding:8px 16px;border-radius:6px;}
+.nav-actions a:hover{color:#ff6600;background:#fff4e6;}
+.checkout-container{max-width:1200px;margin:40px auto;background:#fff;padding:40px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.1);display:flex;gap:40px;flex-wrap:wrap;}
+.order-summary{flex:1;min-width:350px;background:#fafafa;padding:25px;border-radius:10px;border:1px solid #eee;}
+.order-summary h2{margin-bottom:25px;color:#ff6600;font-size:22px;border-bottom:2px solid #ff6600;padding-bottom:10px;}
+.order-summary ul{list-style:none;margin-bottom:20px;}
+.order-summary li{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid #eee;}
+#orderSummary{background:#fff;padding:20px;border-radius:8px;border:1px solid #eee;margin-top:20px;}
+#orderSummary p{margin:10px 0;font-size:15px;}
+#orderSummary strong{color:#ff6600;font-size:16px;}
+.payment-form{flex:1;min-width:350px;}
+.payment-form h2{margin-bottom:25px;color:#ff6600;font-size:22px;border-bottom:2px solid #ff6600;padding-bottom:10px;}
+.payment-form input,.payment-form select{width:100%;padding:14px;margin-bottom:18px;border:2px solid #e0e0e0;border-radius:8px;font-size:16px;transition:border-color 0.3s;background:#fafafa;}
+.payment-form input:focus,.payment-form select:focus{border-color:#ff6600;outline:none;background:#fff;box-shadow:0 0 0 3px rgba(255,102,0,0.1);}
+.payment-form button{background:linear-gradient(135deg, #ff6600, #ff8c00);color:#fff;padding:15px 30px;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:600;transition:all 0.3s;width:100%;margin-top:10px;}
+.payment-form button:hover{background:linear-gradient(135deg, #e05500, #ff6600);transform:translateY(-2px);box-shadow:0 5px 15px rgba(255,102,0,0.3);}
+#successMsg{margin-top:20px;padding:15px;background:#d4edda;color:#155724;border-radius:8px;text-align:center;font-weight:600;display:none;border:1px solid #c3e6cb;}
+#emptyCartMsg{text-align:center;padding:40px;color:#666;background:#fff;border-radius:8px;border:2px dashed #ddd;}
+#emptyCartMsg a{color:#ff6600;text-decoration:underline;font-weight:600;}
+.cart-item-edit{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.cart-item-edit button{padding:5px 10px;border:none;background:#ff6600;color:#fff;border-radius:5px;cursor:pointer;transition:0.3s;}
+.cart-item-edit button:hover{background:#e05500;}
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="header-main">
+    <a href="index.html" class="logo">LOLA</a>
+    <div class="nav-actions">
+      <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+      </a>
+      <a href="profile.html" id="userIcon" class="profile-icon" style="display:none;" aria-label="الملف الشخصي">
+        <i class="fas fa-user-circle"></i>
+      </a>
+      <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
+        <i class="fas fa-heart"></i>
+        <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
+      </a>
+      <a href="login.html" id="loginBtn" class="login-btn" aria-label="تسجيل الدخول">
+        <i class="fas fa-user"></i>
+      </a>
+      <a href="admin-login.html" id="adminLink" class="admin-link" style="display:none;">إدارة</a>
+    </div>
+  </div>
+</header>
+
+<div class="checkout-container">
+
+  <div class="order-summary">
+    <h2>ملخص الطلب</h2>
+    <div id="cartItemsContainer">
+      <p id="emptyCartMsg" style="display:none;">السلة فارغة. <a href="index.html">تابع التسوق</a></p>
+      <ul id="cartItems"></ul>
+    </div>
+    <div id="orderSummary">
+      <p><strong>المجموع: <span id="subtotalAmount">0</span> جنيه</strong></p>
+      <p>الخصم: <span id="discountAmount">0</span> جنيه</p>
+      <p>الشحن: <span id="shippingAmount">0</span> جنيه</p>
+      <p><strong>الإجمالي: <span id="totalAmount">0</span> جنيه</strong></p>
+    </div>
+  </div>
+
+  <div class="payment-form">
+    <h2>تفاصيل الدفع</h2>
+    <form id="checkoutForm">
+      <input type="text" name="fullname" placeholder="الاسم الكامل" required>
+      <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+      <input type="tel" name="phone" placeholder="رقم الهاتف" required>
+      <select id="paymentChoice" name="paymentMethod" required>
+        <option value="" disabled selected>اختر طريقة الدفع</option>
+        <option value="paymob">بطاقة / Paymob</option>
+        <option value="cash">كاش</option>
+      </select>
+      <button type="submit">إتمام الطلب</button>
+      <p id="successMsg">تم استلام طلبك بنجاح!</p>
+    </form>
+  </div>
+
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // إعداد Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyCEY3tkYgxiRRpcOLdx8gRP0uwkaD1sIJQ",
+    authDomain: "lola-6ab46.firebaseapp.com",
+    projectId: "lola-6ab46",
+    storageBucket: "lola-6ab46.appspot.com",
+    messagingSenderId: "166549966504",
+    appId: "1:166549966504:web:4f52282d3fa4a9f0eabc9d"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+
+  let currentUser = null;
+  let discountValue = 0;
+  let appliedDiscountCode = '';
+  let usedCodes = [];
+
+  async function updateCartCount() {
+    const cart = await getCartItems();
+    const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    const cartCountEl = document.getElementById('cart-count');
+    if (cartCountEl) cartCountEl.textContent = count;
+  }
+
+  async function loadWishlistCount() {
+    if (currentUser) {
+      const snapshot = await db.collection("users").doc(currentUser.uid).collection("wishlist").get();
+      const count = snapshot.size;
+      const wishlistCountEl = document.getElementById('wishlist-count');
+      if (wishlistCountEl) wishlistCountEl.textContent = count > 0 ? count : '';
+    } else {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      const count = wishlist.length;
+      const wishlistCountEl = document.getElementById('wishlist-count');
+      if (wishlistCountEl) wishlistCountEl.textContent = count > 0 ? count : '';
+    }
+  }
+
+  auth.onAuthStateChanged(async user => {
+    currentUser = user;
+    if (user) {
+      document.getElementById('loginBtn').style.display = 'none';
+      document.getElementById('userIcon').style.display = 'inline-block';
+    } else {
+      document.getElementById('loginBtn').style.display = 'inline-block';
+      document.getElementById('userIcon').style.display = 'none';
+    }
+    await loadDiscount();
+    await loadCartItems();
+    await updateCartCount();
+    await loadWishlistCount();
+  });
+
+  // دالة لمسح السلة
+  async function clearCart() {
+    if (currentUser) {
+      const cartRef = db.collection("users").doc(currentUser.uid).collection("cart");
+      const snapshot = await cartRef.get();
+      const batch = db.batch();
+      snapshot.docs.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
+    } else {
+      localStorage.removeItem('cart');
+    }
+  }
+
+  async function getCartItems() {
+    if (currentUser) {
+      const snapshot = await db.collection("users").doc(currentUser.uid).collection("cart").get();
+      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    } else {
+      return JSON.parse(localStorage.getItem('cart') || '[]');
+    }
+  }
+
+  async function saveCartItem(itemId, item) {
+    if (currentUser) {
+      await db.collection("users").doc(currentUser.uid).collection("cart").doc(itemId).set(item);
+    } else {
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const index = cart.findIndex(i => i.id === itemId);
+      if (index > -1) cart[index] = item;
+      else cart.push(item);
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }
+
+  async function removeCartItem(itemId) {
+    if (currentUser) {
+      await db.collection("users").doc(currentUser.uid).collection("cart").doc(itemId).delete();
+    } else {
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      cart = cart.filter(i => i.id !== itemId);
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }
+
+  // تحميل الخصم
+  async function loadDiscount() {
+    if (currentUser) {
+      const doc = await db.collection("users").doc(currentUser.uid).get();
+      if (doc.exists) {
+        discountValue = doc.data().discountValue || 0;
+        appliedDiscountCode = doc.data().appliedDiscountCode || '';
+        usedCodes = doc.data().usedCodes || [];
+      }
+    } else {
+      discountValue = parseFloat(localStorage.getItem('discountValue')) || 0;
+      appliedDiscountCode = localStorage.getItem('appliedDiscountCode') || '';
+      usedCodes = JSON.parse(localStorage.getItem('usedCodes') || '[]');
+    }
+  }
+
+  // تحميل السلة
+  async function loadCartItems(){
+    const cart = await getCartItems();
+    const cartItemsContainer = document.getElementById('cartItems');
+    const emptyCartMsg = document.getElementById('emptyCartMsg');
+    cartItemsContainer.innerHTML='';
+
+    if(cart.length===0){
+      emptyCartMsg.style.display='block';
+      updateOrderSummary(0,0,0,0);
+      return;
+    }
+    emptyCartMsg.style.display='none';
+
+    cart.forEach((item,index)=>{
+      const price = parseFloat(item.price)||0;
+      const quantity = item.quantity||1;
+      const itemPrice = price + (item.giftWrapping ? 20 : 0);
+      const itemTotal = itemPrice * quantity;
+
+      const li=document.createElement('li');
+      li.innerHTML=`<div style="display:flex;align-items:center;gap:10px;">
+        ${item.image?`<img src="${item.image}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;" loading="lazy">`:''}
+        <div><strong>${item.name}</strong><br><span>${itemPrice.toFixed(2)} جنيه × ${quantity}</span></div>
+      </div>
+      <span>${itemTotal.toFixed(2)} جنيه</span>`;
+
+      li.style.display='flex'; li.style.justifyContent='space-between'; li.style.alignItems='center';
+      li.style.marginBottom='15px'; li.style.paddingBottom='15px'; li.style.borderBottom='1px solid #eee';
+      cartItemsContainer.appendChild(li);
+    });
+
+    calculateOrderTotal(cart);
+  }
+
+  function calculateOrderTotal(cart){
+    let subtotal=0;
+    cart.forEach(item=>{
+      let itemPrice = parseFloat(item.price)||0;
+      if (item.giftWrapping) itemPrice += 20;
+      subtotal += itemPrice * (item.quantity||1);
+    });
+    const shipping = subtotal >= 1000 ? 0 : 50;
+    const totalAfterDiscount = subtotal - discountValue;
+    const total = totalAfterDiscount + shipping;
+    updateOrderSummary(subtotal, discountValue, shipping, total);
+  }
+
+  function updateOrderSummary(subtotal, discount, shipping, total){
+    document.getElementById('subtotalAmount').textContent=subtotal.toFixed(2);
+    document.getElementById('discountAmount').textContent=discount.toFixed(2);
+    document.getElementById('shippingAmount').textContent=shipping.toFixed(2);
+    document.getElementById('totalAmount').textContent=total.toFixed(2);
+  }
+
+  const form=document.getElementById('checkoutForm');
+  const successMsg=document.getElementById('successMsg');
+
+  // حفظ الطلب
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if (!currentUser) {
+      window.location.href = 'login.html';
+      return;
+    }
+    const cart = await getCartItems();
+    if(cart.length===0){alert('السلة فارغة. أضف منتجات قبل إكمال الطلب.');return;}
+
+    const paymentMethod = form.paymentMethod.value;
+    if(paymentMethod === 'paymob'){
+      alert('طريقة الدفع بالفيزا ستضاف قريباً. حالياً الدفع عند الاستلام متاح فقط.');
+      return;
+    }
+
+    const orderData={
+      fullname: form.fullname.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      paymentMethod,
+      items: cart,
+      subtotal: document.getElementById('subtotalAmount').textContent,
+      discount: discountValue,
+      discountCode: appliedDiscountCode,
+      shipping: document.getElementById('shippingAmount').textContent,
+      total: document.getElementById('totalAmount').textContent,
+      status: "جديد",
+      createdAt: firebase.firestore.Timestamp.now()
+    };
+
+    try {
+      await db.collection('orders').add(orderData);
+      successMsg.style.display='block';
+      await clearCart();
+
+      setTimeout(()=>{
+        alert('✅ تم استلام طلبك بنجاح. الدفع عند الاستلام هو الخيار المتاح حالياً.');
+        window.location.href="index.html";
+      },1500);
+    } catch(err){
+      console.error(err);
+      alert('حدث خطأ أثناء حفظ الطلب');
+    }
+  });
+
+  // No need for additional load here, handled in onAuthStateChanged
+</script>
+
+</body>
+</html>

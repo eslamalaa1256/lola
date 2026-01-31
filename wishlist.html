@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LOLA | المفضلة</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/favorites.css" />
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase Config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEY3tkYgxiRRpcOLdx8gRP0uwkaD1sIJQ",
+      authDomain: "lola-6ab46.firebaseapp.com",
+      projectId: "lola-6ab46",
+      storageBucket: "lola-6ab46.appspot.com",
+      messagingSenderId: "166549966504",
+      appId: "1:166549966504:web:4f52282d3fa4a9f0eabc9d"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+  </script>
+
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="top-bar">
+        <div class="header-main">
+      <a href="index.html" class="logo">LOLA</a>
+      <div class="nav-actions">
+        <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+        </a>
+        <a href="profile.html" id="userIcon" class="profile-icon" style="display:none;" aria-label="الملف الشخصي">
+          <i class="fas fa-user-circle"></i>
+        </a>
+        <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
+          <i class="fas fa-heart"></i>
+          <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
+        </a>
+        <a href="login.html" id="loginBtn" class="login-btn" aria-label="تسجيل الدخول">
+  <i class="fas fa-user"></i>
+</a>
+
+        <a href="admin-login.html" id="adminLink" class="admin-link" style="display:none;">إدارة</a>
+      </div>
+    </div>
+    </header>
+
+  <!-- Main -->
+  <main class="container" id="favoritesContainer">
+    <!-- Loader -->
+    <div id="loader" class="loader" style="display:none;"></div>
+
+    <!-- شبكة العناصر -->
+    <div id="wishlistItems" class="wishlist-grid">
+      <!-- العناصر ستُضاف ديناميكيًا -->
+    </div>
+
+    <!-- حالة فارغة -->
+    <div class="empty" id="emptyState" style="display:none;">
+      <i class="fas fa-heart-broken"></i>
+      <p>قائمة المفضلة فارغة</p>
+      <a href="index.html" class="btn-shop">ابدأ التسوق الآن</a>
+    </div>
+
+    <!-- ملخص المفضلة -->
+    <div id="wishlistSummary" class="wishlist-summary" style="display:none;"></div>
+
+    <!-- أزرار التحكم -->
+    <div id="footerActions" class="footer-actions" style="display:none;">
+      <button onclick="shareWishlist()" class="btn-share"><i class="fas fa-share-alt"></i> مشاركة المفضلة</button>
+    </div>
+
+    <!-- نظام الصفحات -->
+    <div id="pagination" class="pagination" style="display:none;">
+      <button id="prevPage" onclick="changePage(-1)">السابق</button>
+      <span id="pageInfo"></span>
+      <button id="nextPage" onclick="changePage(1)">التالي</button>
+    </div>
+  </main>
+
+  <!-- Toast Container -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <p>هل أنت متأكد من حذف هذا المنتج من المفضلة؟</p>
+      <button id="confirmYes">نعم</button>
+      <button id="confirmNo">لا</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/favorites-enhanced.js"></script>
+</body>
+</html>

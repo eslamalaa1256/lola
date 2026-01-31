@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="سياسة الخصوصية والأمان لمتجر LOLA. تعرف على كيفية جمع واستخدام وحماية بياناتك الشخصية.">
+    <title>LOLA | سياسة الخصوصية والأمان</title>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "سياسة الخصوصية والأمان",
+      "description": "سياسة الخصوصية لمتجر LOLA، تغطي جمع البيانات، الاستخدام، الأمان، وحقوق المستخدم.",
+      "url": "https://lola-store.com/privacy.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "LOLA Store",
+        "url": "https://lola-store.com"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fff;
+            color: #000;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #555;
+        }
+
+        /* الهيدر */
+        .top-bar {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 20px;
+        }
+
+        .header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: black;
+            letter-spacing: 2px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #search-box {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: .3s;
+            outline: none;
+        }
+
+        #search-box:focus {
+            border-color: #000;
+        }
+
+        .cart-icon,
+        .wishlist-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        .cart-icon:hover,
+        .wishlist-icon:hover {
+            transform: scale(1.2);
+            color: #f0c040;
+        }
+
+        .cart-count {
+            background: var(--accent-color);
+        }
+
+        .wishlist-count {
+            background: #3498db;
+        }
+
+        .cart-count,
+        .wishlist-count {
+            position: absolute;
+            top: -5px;
+            right: -6px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .cart-icon.has-items .cart-count,
+        .wishlist-icon.has-items .wishlist-count {
+            display: flex;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #loginBtn {
+            padding: 6px 14px;
+            border: 1px solid black;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+            text-decoration: none;
+            color: black;
+        }
+
+        #loginBtn:hover {
+            background: black;
+            color: white;
+        }
+
+        #userIcon {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s;
+        }
+
+        #userIcon:hover {
+            transform: scale(1.1);
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* الحاوية */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1,
+        h2 {
+            color: #000;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-right: 20px;
+            list-style-position: inside;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* تأثير بسيط عند تمرير الفقرة */
+        p:hover {
+            color: #333;
+        }
+
+        /* الفوتر */
+        .footer {
+            margin-top: 50px;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* التجاوب */
+        @media (max-width:768px) {
+            .top-bar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 12px 20px;
+            }
+
+            .nav-actions {
+                margin-top: 5px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width:480px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            .container {
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- الهيدر -->
+    <header class="top-bar">
+        <div class="header-main">
+      <a href="index.html" class="logo">LOLA</a>
+      <div class="nav-actions">
+        <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+        </a>
+        <a href="profile.html" id="userIcon" class="profile-icon" style="display:none;" aria-label="الملف الشخصي">
+          <i class="fas fa-user-circle"></i>
+        </a>
+        <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
+          <i class="fas fa-heart"></i>
+          <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
+        </a>
+        <a href="login.html" id="loginBtn" class="login-btn" aria-label="تسجيل الدخول">
+  <i class="fas fa-user"></i>
+</a>
+
+        <a href="admin-login.html" id="adminLink" class="admin-link" style="display:none;">إدارة</a>
+      </div>
+    </div>
+    </header>
+
+    <!-- جدول المحتويات -->
+    <div class="toc">
+        <h2>جدول المحتويات</h2>
+        <ul>
+            <li><a href="#section1">1. جمع البيانات</a></li>
+            <li><a href="#section2">2. استخدام البيانات</a></li>
+            <li><a href="#section3">3. الأمان</a></li>
+            <li><a href="#section4">4. الدفع والتسوق الآمن</a></li>
+            <li><a href="#section5">5. التوصيل والاسترجاع</a></li>
+            <li><a href="#section6">6. ملفات تعريف الارتباط</a></li>
+            <li><a href="#section7">7. مشاركة البيانات</a></li>
+            <li><a href="#section8">8. حقوق المستخدم</a></li>
+            <li><a href="#section9">9. الاتصال بنا</a></li>
+            <li><a href="#section10">10. التحديثات على سياسة الخصوصية</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h1>سياسة الخصوصية والأمان</h1>
+
+        <p>نحن في LOLA نلتزم بحماية بياناتك الشخصية وتوفير تجربة تسوق آمنة وموثوقة لجميع عملائنا.</p>
+
+        <h2 id="section1">1. جمع البيانات</h2>
+        <p>نقوم بجمع المعلومات التالية عند التسجيل أو إتمام الطلب:</p>
+        <ul>
+            <li>الاسم الكامل</li>
+            <li>البريد الإلكتروني</li>
+            <li>رقم الهاتف</li>
+            <li>عنوان التوصيل</li>
+            <li>تفاصيل الطلب مثل المنتجات، المقاسات، الكميات</li>
+        </ul>
+
+        <h2 id="section2">2. استخدام البيانات</h2>
+        <p>نستخدم بياناتك للأغراض التالية:</p>
+        <ul>
+            <li>إتمام الطلب وتوصيله لك بنجاح.</li>
+            <li>إرسال تأكيدات الطلب والتحديثات المتعلقة به.</li>
+            <li>تحسين تجربة التسوق على الموقع وعرض منتجات مناسبة لك.</li>
+            <li>الاتصال بك عند الضرورة بخصوص الطلبات أو الخدمات.</li>
+        </ul>
+
+        <h2 id="section3">3. الأمان</h2>
+        <p>نلتزم باتخاذ جميع الإجراءات التقنية والإدارية لحماية معلوماتك:</p>
+        <ul>
+            <li>تشفير البيانات عند إرسالها عبر الموقع.</li>
+            <li>تخزين البيانات في بيئة آمنة ومحمية.</li>
+            <li>تقييد الوصول للبيانات على الموظفين المخولين فقط.</li>
+        </ul>
+
+        <h2 id="section4">4. الدفع والتسوق الآمن</h2>
+        <p>نوفر طرق دفع آمنة تشمل:</p>
+        <ul>
+            <li>الدفع عند الاستلام (كاش)</li>
+            <li>الدفع عبر بطاقة فيزا أو ماستركارد</li>
+        </ul>
+
+        <h2 id="section5">5. التوصيل والاسترجاع</h2>
+        <p>نقدم خدمات التوصيل لجميع الطلبات مع خيارات مرنة:</p>
+        <ul>
+            <li>توصيل سريع للطلبات داخل مصر.</li>
+            <li>سياسة إرجاع واضحة خلال 7 أيام من الاستلام إذا كانت المنتجات سليمة.</li>
+            <li>استبدال أو استرجاع المنتجات التالفة أو غير المطابقة للطلب.</li>
+        </ul>
+
+        <h2 id="section6">6. ملفات تعريف الارتباط (Cookies)</h2>
+        <p>نستخدم ملفات تعريف الارتباط لتحسين تجربتك على الموقع:</p>
+        <ul>
+            <li>تخزين تفضيلاتك لتخصيص المحتوى.</li>
+            <li>تحليل حركة الموقع لتحسين الأداء.</li>
+            <li>يمكنك إدارة إعدادات ملفات تعريف الارتباط من خلال متصفحك.</li>
+        </ul>
+
+        <h2 id="section7">7. مشاركة البيانات</h2>
+        <p>نحن لا نبيع أو نشارك بياناتك الشخصية مع أطراف ثالثة إلا في الحالات التالية:</p>
+        <ul>
+            <li>مع مقدمي الخدمات مثل شركات التوصيل لإتمام الطلب.</li>
+            <li>عند الحاجة القانونية أو للحماية من الاحتيال.</li>
+            <li>مع موافقتك الصريحة.</li>
+        </ul>
+
+        <h2 id="section8">8. حقوق المستخدم</h2>
+        <p>لديك الحقوق التالية بشأن بياناتك:</p>
+        <ul>
+            <li>الوصول إلى بياناتك الشخصية.</li>
+            <li>تصحيح أو تحديث معلوماتك.</li>
+            <li>الاعتراض على معالجة بياناتك.</li>
+        </ul>
+
+        <h2 id="section9">9. الاتصال بنا</h2>
+        <p>إذا كان لديك أي أسئلة حول سياسة الخصوصية، يمكنك الاتصال بنا عبر:</p>
+        <ul>
+            <li>البريد الإلكتروني: xcodegroup2025@gmail.com</li>
+            <li>الهاتف: 01019073627</li>
+            <li>العنوان: الشرقيه، مصر</li>
+        </ul>
+
+        <h2 id="section10">10. التحديثات على سياسة الخصوصية</h2>
+        <p>قد نقوم بتحديث هذه السياسة بين فترة وأخرى لضمان حماية أفضل للمستخدمين، وسيتم إشعارك بأي تغييرات مهمة عبر الموقع أو البريد الإلكتروني.</p>
+
+    </div>
+
+    <div class="footer">
+        &copy; 2025 xcode. جميع الحقوق محفوظة. |
+        <a href="index.html">الرئيسية</a> |
+        <a href="about.html">من نحن</a> |
+        <a href="contact.html">اتصل بنا</a> |
+        <a href="Terms of Use.html">شروط الاستخدام</a>
+    </div>
+
+    <script>
+        // تحديث عدد العناصر في الهيدر
+        function updateHeaderCounts() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            const cartCount = document.getElementById('cart-count');
+            const wishlistCount = document.getElementById('wishlist-count');
+
+            if (cartCount) {
+                cartCount.innerText = cart.length;
+                cartCount.style.display = cart.length > 0 ? 'inline-block' : 'none';
+            }
+            if (wishlistCount) {
+                wishlistCount.innerText = wishlist.length;
+                wishlistCount.style.display = wishlist.length > 0 ? 'inline-block' : 'none';
+            }
+        }
+
+        // استدعاء الدالة عند تحميل الصفحة
+        updateHeaderCounts();
+    </script>
+
+</body>
+
+</html>

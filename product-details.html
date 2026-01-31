@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LOLA | تفاصيل المنتج</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/product-details.css" />
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="header-main">
+      <a href="index.html" class="logo">LOLA</a>
+      <div class="nav-actions">
+        <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+        </a>
+        <a href="profile.html" id="userIcon" class="profile-icon" style="display:none;" aria-label="الملف الشخصي">
+          <i class="fas fa-user-circle"></i>
+        </a>
+        <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
+          <i class="fas fa-heart"></i>
+          <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
+        </a>
+        <a href="login.html" id="loginBtn" class="login-btn" aria-label="تسجيل الدخول">
+  <i class="fas fa-user"></i>
+</a>
+
+        <a href="admin-login.html" id="adminLink" class="admin-link" style="display:none;">إدارة</a>
+      </div>
+    </div>
+</header>
+
+<!-- تفاصيل المنتج -->
+<div class="container">
+  <div class="product-gallery">
+    <div class="main-img-wrapper">
+      <img id="mainImg" class="main-img" alt="صورة المنتج" />
+      <div id="zoomLens" class="zoom-lens" style="display:none;"></div>
+      <button id="view360Btn" class="view-360-btn" title="عرض 360 درجة">
+        <i class="fas fa-sync-alt"></i> 360°
+      </button>
+      <div class="image-indicator" id="imageIndicator">
+        <span id="currentImageIndex">1</span> / <span id="totalImages">5</span>
+      </div>
+      <!-- Product Videos -->
+      <div id="productVideos" class="product-videos" style="display:none;">
+        <video id="productVideo" controls style="width:100%; border-radius:10px;">
+          <source src="" type="video/mp4">
+          متصفحك لا يدعم الفيديو.
+        </video>
+      </div>
+    </div>
+    <div class="thumbnail-container swiper-container" id="thumbnailContainer">
+      <div class="swiper-wrapper">
+        <!-- Thumbnails carousel items -->
+      </div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+    <!-- Video Thumbnails -->
+    <div id="videoThumbnails" class="video-thumbnails" style="display:none;">
+      <button id="playVideoBtn" class="video-thumb-btn">
+        <i class="fas fa-play"></i> فيديو المنتج
+      </button>
+    </div>
+  </div>
+
+  <div class="product-details">
+    <h1 id="productName">اسم المنتج</h1>
+    
+    <!-- ملخص التقييم -->
+    <div class="product-rating-summary" id="averageRatingSummary">
+      ⭐⭐⭐⭐☆ (4/5) - <span id="totalReviewsCount">0</span> تقييم
+    </div>
+
+    <!-- تقييم تفاعلي -->
+    <div class="interactive-rating">
+      <label>قيم المنتج:</label>
+      <div class="stars" id="interactiveStars">
+        <span class="star" data-value="1">☆</span>
+        <span class="star" data-value="2">☆</span>
+        <span class="star" data-value="3">☆</span>
+        <span class="star" data-value="4">☆</span>
+        <span class="star" data-value="5">☆</span>
+      </div>
+    </div>
+    
+    <p id="productDesc">وصف مختصر للمنتج...</p>
+    <p id="productPrice">0 egp</p>
+
+    <!-- شريط تقدم التخفيض -->
+    <div class="discount-progress" id="discountProgress" style="display:none;">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span id="discountText">خصم 20% - اشترِ الآن!</span>
+    </div>
+
+    <!-- حالة المخزون -->
+    <div id="stockStatus" data-stock="inStock">متوفر</div>
+
+    <!-- اختيار المقاس -->
+    <div class="sizes" id="sizesContainer">
+      <label>اختر المقاس:</label>
+    </div>
+    <div id="selectedSize" class="selection-result"></div>
+    <div class="size-guide" onclick="toggleSizeGuide()"> دليل المقاسات </div>
+
+    <!-- اختيار اللون -->
+    <div class="colors" id="colorsContainer">
+      <label>اختر اللون:</label>
+      <div class="color-swatch" data-color="red" title="أحمر"></div>
+      <div class="color-swatch" data-color="blue" title="أزرق"></div>
+      <div class="color-swatch" data-color="green" title="أخضر"></div>
+    </div>
+    <div id="selectedColor" class="selection-result"></div>
+
+    <!-- كمية المنتج -->
+    <div class="quantity">
+      <button onclick="changeQty(-1)">-</button>
+      <input type="text" id="qty" value="1" readonly />
+      <button onclick="changeQty(1)">+</button>
+    </div>
+
+    <!-- أزرار الإضافة -->
+    <div class="product-actions">
+      <button class="add-to-cart" id="mainAddToCartBtn">
+        <i class="fas fa-cart-plus"></i> إضافة إلى السلة
+      </button>
+      <button class="add-to-wishlist" id="wishlistBtn">♡ المفضلة</button>
+    </div>
+
+    <!-- عداد زمني للعروض -->
+    <div class="countdown-timer" id="countdownTimer" style="display:none;">
+      <h3>عرض خاص ينتهي خلال:</h3>
+      <div class="timer" id="timer">
+        <div class="time-block">
+          <span id="days">00</span>
+          <small>يوم</small>
+        </div>
+        <div class="time-block">
+          <span id="hours">00</span>
+          <small>ساعة</small>
+        </div>
+        <div class="time-block">
+          <span id="minutes">00</span>
+          <small>دقيقة</small>
+        </div>
+        <div class="time-block">
+          <span id="seconds">00</span>
+          <small>ثانية</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- مشاركة المنتج -->
+    <div class="share">
+      <span>شارك المنتج:</span>
+      <i class="fab fa-facebook"></i>
+      <i class="fab fa-instagram"></i>
+      <i class="fab fa-whatsapp"></i>
+    </div>
+
+    <!-- إثبات اجتماعي -->
+    <div class="social-proof" id="socialProof">
+      <span>👁️ <span id="viewCount">0</span> مشاهدة</span>
+      <span>🛒 <span id="purchaseCount">0</span> مشترى</span>
+    </div>
+
+    <!-- نقاط الولاء -->
+  
+
+    <!-- خيارات التغليف كهدية -->
+    <div class="gift-wrapping" id="giftWrapping">
+      <label><input type="checkbox" id="giftWrapCheckbox"> تغليف كهدية (+20 ج.م)</label>
+    </div>
+
+
+    
+
+    <!-- Tabs Section -->
+    <div class="product-info-tabs sticky-tabs">
+      <div class="tabs-nav">
+        <button class="tab-button active" data-tab="descriptionTab">الوصف</button>
+        <button class="tab-button" data-tab="specificationsTab">المواصفات</button>
+        <button class="tab-button" data-tab="faqTab">الأسئلة الشائعة</button>
+        <button class="tab-button" data-tab="qaTab">الأسئلة والأجوبة</button>
+        <button class="tab-button" data-tab="warrantyTab">الضمان</button>
+        <button class="tab-button" data-tab="reviewsTab">التقييمات (<span id="totalReviewsCountTabs">0</span>)</button>
+      </div>
+
+      <div id="descriptionTab" class="tab-content active">
+        <p id="productFullDescription">الوصف الكامل للمنتج...</p>
+        <div id="shippingInfo" style="margin-top:20px; padding:10px; background:#f9f9f9; border-radius:8px;">
+          <h4>معلومات الشحن:</h4>
+          <p> شحن مجاني للطلبات فوق 2000 ج.م. تسليم خلال 3-5 أيام عمل. شحن دولي غير متاح  .</p>
+        </div>
+      </div>
+
+      <div id="specificationsTab" class="tab-content">
+        <ul id="productSpecificationsList"></ul>
+      </div>
+
+      <div id="faqTab" class="tab-content">
+        <div class="faq-item">
+          <h4>ما هي سياسة الإرجاع؟</h4>
+          <p>يمكنك إرجاع المنتج خلال 30 يومًا إذا كان في حالته الأصلية.</p>
+        </div>
+        <div class="faq-item">
+          <h4>هل يدعم الشحن الدولي؟</h4>
+          <p>نعم، نشحن إلى جميع الدول مع رسوم شحن إضافية.</p>
+        </div>
+        <div class="faq-item">
+          <h4>كيف أقيس المقاس المناسب؟</h4>
+          <p>راجع دليل المقاسات أعلاه أو اتصل بنا للمساعدة.</p>
+        </div>
+        <div class="faq-item">
+          <h4>هل المنتج أصلي؟</h4>
+          <p>جميع منتجاتنا أصلية 100% مع ضمان الجودة.</p>
+        </div>
+      </div>
+
+      <div id="qaTab" class="tab-content">
+        <div id="qaList"></div>
+        <form id="qaForm" style="margin-top:20px; padding:20px; border:1px solid #eee; border-radius:10px; background:#fdfdfd;">
+          <label for="qaQuestion">اطرح سؤالك:</label><br />
+          <textarea id="qaQuestion" rows="3" placeholder="اكتب سؤالك هنا..." required></textarea><br /><br />
+          <button type="submit">إرسال السؤال</button>
+        </form>
+      </div>
+
+      <div id="warrantyTab" class="tab-content">
+        <h4>معلومات الضمان والإرجاع</h4>
+        <p>نحن نقدم ضمانًا شاملاً على جميع منتجاتنا. يغطي الضمان العيوب في المواد والتصنيع لمدة عام كامل من تاريخ الشراء.</p>
+        <ul>
+          <li>ضمان لمدة عام على العيوب.</li>
+          <li>إرجاع مجاني خلال 30 يومًا.</li>
+          <li>دعم فني متوفر 24/7.</li>
+        </ul>
+      </div>
+
+      <div id="reviewsTab" class="tab-content">
+        <form id="reviewForm">
+          <label for="rating">التقييم:</label>
+          <select id="rating" required>
+            <option value="">اختر التقييم</option>
+            <option value="5">★★★★★</option>
+            <option value="4">★★★★☆</option>
+            <option value="3">★★★☆☆</option>
+            <option value="2">★★☆☆☆</option>
+            <option value="1">★☆☆☆☆</option>
+          </select><br /><br />
+          <label for="comment">التعليق:</label><br />
+          <textarea id="comment" rows="4" placeholder="اكتب تعليقك هنا..." required></textarea><br /><br />
+          <label for="images">رفع صور (اختياري):</label><br />
+          <input type="file" id="images" accept="image/*" multiple><br /><br />
+          <button type="submit">إرسال التقييم</button>
+        </form>
+        <div style="margin-top:20px;">
+          <label for="reviewFilter">فلتر التقييمات:</label>
+          <select id="reviewFilter">
+            <option value="all">جميع التقييمات</option>
+            <option value="5">5 نجوم</option>
+            <option value="4">4 نجوم</option>
+            <option value="3">3 نجوم</option>
+            <option value="2">2 نجوم</option>
+            <option value="1">نجمة واحدة</option>
+          </select>
+        </div>
+        <div id="reviewsList" style="margin-top:30px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- قسم المنتجات المقترحة -->
+<section id="relatedProducts" class="section-card">
+  <h2>منتجات قد تعجبك</h2>
+  <div class="related-grid"></div>
+</section>
+
+<!-- قسم المنتجات المشاهدة مؤخرًا -->
+<section id="recentlyViewed" class="section-card" style="display:none;">
+  <h2>المنتجات المشاهدة مؤخرًا</h2>
+  <div class="recently-viewed-grid"></div>
+</section>
+
+<!-- Size Guide Modal -->
+<div id="sizeModal">
+  <div class="size-modal-content">
+    <span id="closeSizeBtn" class="close" onclick="closeSizeModal()">&times;</span>
+    <h2>دليل المقاسات</h2>
+    <div id="sizeTable"></div>
+  </div>
+</div>
+
+<!-- Sticky Add to Cart Bar -->
+<div class="sticky-add-to-cart-bar" id="stickyAddToCartBar">
+  <span class="product-name-sticky" id="stickyProductName">اسم المنتج</span>
+  <span class="sticky-price" id="stickyProductPrice">EGP 0</span>
+  <div class="quantity">
+    <button onclick="changeQty(-1)">-</button>
+    <input type="text" id="stickyQty" value="1" readonly />
+    <button onclick="changeQty(1)">+</button>
+  </div>
+  <button class="add-to-cart" id="stickyAddToCartBtn">
+    <i class="fas fa-cart-plus"></i> إضافة إلى السلة
+  </button>
+  <button class="add-to-wishlist" id="stickyWishlistBtn">♡ المفضلة</button>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<footer>
+  <div>© 2025 xcode جميع الحقوق محفوظة.</div>
+  <div>
+    <a href="about.html">عنّا</a> | 
+    <a href="contact.html">تواصل معنا</a> | 
+    <a href="privacy.html">سياسة الخصوصية</a> | 
+    <a href="Terms of Use.html">شروط الاستخدام</a>
+  </div>
+</footer>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="js/header.js"></script>
+<script src="js/product-details.js"></script>
+
+<script>
+// تفعيل التبويبات
+document.addEventListener('DOMContentLoaded', () => {
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+
+      button.classList.add('active');
+      const tabId = button.getAttribute('data-tab');
+      const activeTab = document.getElementById(tabId);
+      if (activeTab) activeTab.classList.add('active');
+    });
+  });
+});
+</script>
+
+</body>
+</html>

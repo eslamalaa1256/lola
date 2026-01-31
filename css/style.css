@@ -1,0 +1,585 @@
+    /* تعريف المتغيرات (Custom Properties) لاستخدامها في التصميم */
+    :root {
+      --primary-color: #2a7a55; /* لون أساسي، غالباً للأزرار والخلفيات */
+      --secondary-color: #f8f8f8; /* لون ثانوي، غالبًا لخلفية الصفحة */
+      --accent-color: #e74c3c; /* لون مميز، للتركيز على عناصر معينة (مثل الأسعار) */
+      --text-color: #333; /* لون النص الأساسي */
+      --text-light: #666; /* لون النص الفاتح */
+      --border-color: #e6e6e6; /* لون الحدود */
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* تأثير الظل */
+      --transition: all 0.3s ease; /* تعريف حركة انتقال سلسة للعناصر */
+    }
+
+    /* إعادة تعيين الهوامش والمسافات الداخلية لجميع العناصر وإعداد box-sizing */
+    * {
+      margin: 0; /* إزالة الهامش الخارجي */
+      padding: 0; /* إزالة المسافة الداخلية */
+      box-sizing: border-box; /* يجعل حساب الأبعاد يشمل الهوامش والحدود */
+    }
+
+    /* تنسيقات أساسية لجسم الصفحة */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* تحديد الخط */
+      background-color: var(--secondary-color); /* لون الخلفية من المتغيرات */
+      color: var(--text-color); /* لون النص من المتغيرات */
+      line-height: 1.6; /* تباعد الأسطر */
+    }
+
+    /* تنسيقات الروابط التشعبية */
+    a {
+      text-decoration: none; /* إزالة خط تحت الروابط */
+      color: inherit; /* وراثة لون النص من العنصر الأب */
+      transition: var(--transition); /* تطبيق حركة انتقال عند التفاعل */
+    }
+
+    /* ======================
+       Header مع الفلترة (عنوان رئيسي مع قسم التصفية)
+    ====================== */
+    /* تنسيقات الشريط العلوي (الرأس) */
+    .top-bar {
+      display: flex; /* استخدام Flexbox لتنظيم العناصر */
+      flex-direction: column; /* تنظيم العناصر عمودياً */
+      background: #fff; /* خلفية بيضاء */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* إضافة ظل خفيف */
+      position: sticky; /* جعل العنصر يلتصق بالأعلى عند التمرير */
+      top: 0; /* تحديد موضع الالتصاق عند أعلى الصفحة */
+      z-index: 1000; /* ترتيب طبقات العنصر (جعله فوق العناصر الأخرى) */
+    }
+
+    /* تنسيقات القسم الرئيسي للرأس */
+    .header-main {
+      display: flex; /* استخدام Flexbox */
+      justify-content: space-between; /* توزيع العناصر بالتساوي مع مسافات بينها */
+      align-items: center; /* محاذاة العناصر عمودياً في المنتصف */
+      padding: 15px 30px; /* مسافة داخلية */
+    }
+
+    /* تنسيقات الشعار */
+    .logo {
+      font-size: 28px; /* حجم الخط */
+      font-weight: bold; /* سمك الخط */
+      color: black; /* لون النص أسود */
+      letter-spacing: 2px; /* تباعد الأحرف */
+    }
+
+    /* تنسيقات حاوية أزرار الإجراءات في التنقل */
+    .nav-actions {
+      display: flex; /* استخدام Flexbox */
+      align-items: center; /* محاذاة العناصر عمودياً في المنتصف */
+      gap: 15px; /* مسافة بين العناصر */
+    }
+
+    /* تنسيقات أيقونات سلة المشتريات وقائمة الرغبات */
+    .cart-icon,
+    .wishlist-icon {
+      position: relative; /* تحديد الموضع النسبي للعنصر (لأجل الأرقام بداخله) */
+      cursor: pointer; /* تغيير مؤشر الماوس إلى يد */
+      font-size: 20px; /* حجم الأيقونة */
+      transition: transform 0.2s ease; /* حركة انتقال عند التحويل */
+    }
+
+    /* تأثيرات عند تمرير الماوس فوق أيقونات سلة المشتريات وقائمة الرغبات */
+    .cart-icon:hover,
+    .wishlist-icon:hover {
+      transform: scale(1.2); /* تكبير الأيقونة */
+      color: #f0c040; /* تغيير لون الأيقونة */
+    }
+
+    /* خلفية عداد سلة المشتريات */
+    .cart-count {
+      background: var(--accent-color); /* استخدام لون مميز من المتغيرات */
+    }
+
+    /* خلفية عداد قائمة الرغبات */
+    .wishlist-count {
+      background: #3498db; /* لون أزرق */
+    }
+
+
+    /* تنسيقات عدادات سلة المشتريات وقائمة الرغبات */
+    .cart-count,
+    .wishlist-count {
+      position: absolute; /* تحديد الموضع المطلق (بالنسبة للعنصر الأب ذو position: relative) */
+      top: -5px; /* إزاحة للأعلى */
+      right: -6px; /* إزاحة لليمين */
+      width: 18px; /* عرض العداد */
+      height: 18px; /* ارتفاع العداد */
+      border-radius: 50%; /* جعله دائرياً */
+      font-size: 12px; /* حجم الخط */
+      display: flex; /* استخدام Flexbox */
+      align-items: center; /* محاذاة النص عمودياً في المنتصف */
+      justify-content: center; /* محاذاة النص أفقياً في المنتصف */
+      color: white; /* لون النص أبيض */
+      font-weight: bold; /* سمك الخط */
+    }
+
+    /* تنسيقات زر تسجيل الدخول */
+    #loginBtn {
+      padding: 6px 14px; /* مسافة داخلية */
+      border: 1px solid black; /* حدود سوداء */
+      border-radius: 20px; /* حواف دائرية */
+      background: white; /* خلفية بيضاء */
+      cursor: pointer; /* تغيير مؤشر الماوس */
+      font-size: 14px; /* حجم الخط */
+      transition: var(--transition); /* تطبيق حركة انتقال */
+    }
+
+    /* تأثير عند تمرير الماوس فوق زر تسجيل الدخول */
+    #loginBtn:hover {
+      background: black; /* خلفية سوداء */
+      color: white; /* لون النص أبيض */
+    }
+
+    /* تنسيقات أيقونة المستخدم (عند تسجيل الدخول) */
+    #userIcon {
+      width: 40px; /* عرض الأيقونة */
+      height: 40px; /* ارتفاع الأيقونة */
+      border-radius: 50%; /* جعلها دائرية */
+      background: #f0f0f0; /* خلفية رمادية فاتحة */
+      color: #000; /* لون الأيقونة أسود */
+      display: none; /* إخفاء الأيقونة مبدئيًا */
+      align-items: center; /* محاذاة الأيقونة عمودياً في المنتصف */
+      justify-content: center; /* محاذاة الأيقونة أفقياً في المنتصف */
+      font-size: 20px; /* حجم الخط */
+      cursor: pointer; /* تغيير مؤشر الماوس */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* إضافة ظل */
+      transition: var(--transition); /* تطبيق حركة انتقال */
+    }
+
+    /* تأثير عند تمرير الماوس فوق أيقونة المستخدم */
+    #userIcon:hover {
+      transform: scale(1.1); /* تكبير الأيقونة */
+      background: #ddd; /* تغيير لون الخلفية */
+    }
+
+    /* الفلترة في الهيدر */
+    /* تنسيقات قسم التصفية في الرأس */
+    .header-filters {
+      background: #f8f9fa; /* خلفية رمادية فاتحة جداً */
+      padding: 15px 30px; /* مسافة داخلية */
+      border-top: 1px solid #eee; /* حدود علوية */
+      display: flex; /* استخدام Flexbox */
+      justify-content: space-between; /* توزيع العناصر بالتساوي مع مسافات بينها */
+      align-items: center; /* محاذاة العناصر عمودياً في المنتصف */
+      flex-wrap: wrap; /* السماح للعناصر بالانتقال إلى سطر جديد عند عدم وجود مساحة */
+      gap: 15px; /* مسافة بين العناصر */
+    }
+
+    /* تنسيقات حاوية أزرار الفلترة */
+    .filters {
+      display: flex; /* استخدام Flexbox */
+      gap: 10px; /* مسافة بين العناصر */
+      flex-wrap: wrap; /* السماح للعناصر بالانتقال إلى سطر جديد */
+    }
+
+    /* تنسيقات أزرار الفلترة */
+    .filter-btn {
+      padding: 8px 16px; /* مسافة داخلية */
+      border: 1px solid #ddd; /* حدود رمادية فاتحة */
+      background: white; /* خلفية بيضاء */
+      border-radius: 20px; /* حواف دائرية */
+      cursor: pointer; /* تغيير مؤشر الماوس */
+      transition: all 0.3s; /* حركة انتقال عند التفاعل */
+      font-size: 14px; /* حجم الخط */
+    }
+
+    /* تنسيقات زر الفلترة النشط */
+    .filter-btn.active {
+      background: var(--primary-color); /* استخدام اللون الأساسي للخلفية */
+      color: white; /* لون النص أبيض */
+      border-color: var(--primary-color); /* لون الحدود من اللون الأساسي */
+    }
+
+    /* تأثير عند تمرير الماوس فوق أزرار الفلترة غير النشطة */
+    .filter-btn:hover:not(.active) {
+      border-color: var(--primary-color); /* تغيير لون الحدود إلى اللون الأساسي */
+      color: var(--primary-color); /* تغيير لون النص إلى اللون الأساسي */
+    }
+
+    /* تنسيقات حاوية البحث والتصفية في الرأس */
+    .header-search-filter {
+      display: flex; /* استخدام Flexbox */
+      align-items: center; /* محاذاة العناصر عمودياً في المنتصف */
+    }
+
+    /* تنسيقات حقل البحث في الرأس */
+    .header-search-filter input {
+      padding: 8px 15px; /* مسافة داخلية */
+      border: 1px solid #ddd; /* حدود رمادية فاتحة */
+      border-radius: 20px; /* حواف دائرية */
+      width: 200px; /* عرض حقل البحث */
+      text-align: right; /* محاذاة النص لليمين (للدعم اللغات من اليمين لليسار) */
+    }
+
+    /* تنسيقات زر تبديل الفلتر (يظهر في الشاشات الصغيرة) */
+    .filter-toggle {
+      display: none; /* إخفاء الزر مبدئيًا */
+      background: var(--primary-color); /* خلفية من اللون الأساسي */
+      color: white; /* لون النص أبيض */
+      border: none; /* إزالة الحدود */
+      padding: 8px 15px; /* مسافة داخلية */
+      border-radius: 20px; /* حواف دائرية */
+      cursor: pointer; /* تغيير مؤشر الماوس */
+      font-size: 14px; /* حجم الخط */
+    }
+
+    /* ======================
+       Products Header (عنوان قسم المنتجات)
+    ====================== */
+    /* تنسيقات رأس قسم المنتجات */
+    .products-header {
+      background: #f2efe8; /* خلفية بلون فاتح */
+      padding: 40px 30px; /* مسافة داخلية */
+      text-align: center; /* محاذاة النص في المنتصف */
+    }
+
+    /* تنسيقات عنوان H1 في رأس قسم المنتجات */
+    .products-header h1 {
+      font-size: 32px; /* حجم الخط */
+      margin-bottom: 10px; /* هامش سفلي */
+    }
+
+    /* تنسيقات فقرة النص في رأس قسم المنتجات */
+    .products-header p {
+      font-size: 16px; /* حجم الخط */
+      color: #555; /* لون نص رمادي غامق */
+    }
+
+    /* ======================
+       Product Grid (شبكة المنتجات)
+    ====================== */
+    /* تنسيقات شبكة عرض المنتجات */
+    .product-grid {
+      display: grid; /* استخدام CSS Grid لتنظيم العناصر */
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* تحديد أعمدة مرنة */
+      gap: 25px; /* مسافة بين عناصر الشبكة */
+      padding: 40px 30px; /* مسافة داخلية */
+    }
+
+    /* تنسيقات بطاقة المنتج الفردية */
+    .product-card {
+      background: #fff; /* خلفية بيضاء */
+      border-radius: 15px; /* حواف دائرية */
+      box-shadow: var(--shadow); /* تطبيق الظل من المتغيرات */
+      padding: 20px; /* مسافة داخلية */
+      text-align: center; /* محاذاة النص في المنتصف */
+      transition: var(--transition); /* تطبيق حركة انتقال */
+      cursor: pointer; /* تغيير مؤشر الماوس */
+      position: relative; /* تحديد الموضع النسبي للعنصر (لأجل الأيقونات بداخله) */
+      overflow: hidden; /* إخفاء المحتوى الزائد عن حدود العنصر */
+    }
+
+    /* تأثير عند تمرير الماوس فوق بطاقة المنتج */
+    .product-card:hover {
+      transform: translateY(-8px); /* رفع البطاقة قليلاً للأعلى */
+      box-shadow: 0 12px 25px rgba(248, 248, 248, 0.2); /* تغيير الظل */
+    }
+
+    /* تنسيقات صور المنتج داخل البطاقة */
+    .product-card img {
+      width: 100%; /* عرض الصورة بنسبة 100% من العنصر الأب */
+      height: 220px; /* ارتفاع ثابت للصورة */
+      object-fit: cover; /* تغطية الصورة للمساحة المحددة مع الحفاظ على الأبعاد */
+      border-radius: 12px; /* حواف دائرية للصورة */
+      transition: var(--transition); /* تطبيق حركة انتقال */
+    }
+
+    /* تأثير عند تمرير الماوس فوق الصورة داخل بطاقة المنتج */
+    .product-card:hover img {
+      transform: scale(1.05); /* تكبير الصورة قليلاً */
+    }
+
+    /* تنسيقات عنوان H3 لاسم المنتج */
+    .product-card h3 {
+      font-size: 19px; /* حجم الخط */
+      margin: 12px 0 8px; /* هوامش علوية وسفلية وجانبية */
+    }
+
+    /* تنسيقات سعر المنتج */
+    .product-card .price {
+      font-size: 18px; /* حجم الخط */
+      color: var(--accent-color); /* لون من اللون المميز */
+      font-weight: bold; /* سمك الخط */
+      margin: 10px 0; /* هوامش علوية وسفلية */
+    }
+
+    /* تنسيقات السعر القديم (للمنتجات المخفضة) */
+    .product-card .old-price {
+      font-size: 14px; /* حجم الخط */
+      color: #999; /* لون رمادي */
+      text-decoration: line-through; /* وضع خط على النص */
+      margin-right: 8px; /* هامش لليمين */
+    }
+
+    /* تنسيقات تقييم المنتج (النجوم) */
+    .product-card .rating {
+      color: #f39c12; /* لون أصفر للنجوم */
+      font-size: 16px; /* حجم الخط */
+      margin: 8px 0; /* هوامش علوية وسفلية */
+    }
+
+    /* تنسيقات رقم التقييم أو عدد المراجعات بجانب النجوم */
+    .product-card .rating span {
+      margin-left: 5px; /* هامش لليسار */
+      color: #666; /* لون رمادي */
+    }
+
+    /* تنسيقات الشارة (badge) للمنتجات الجديدة أو المخفضة */
+    .badge {
+      position: absolute; /* تحديد الموضع المطلق */
+      top: 10px; /* إزاحة من الأعلى */
+      right: 10px; /* إزاحة من اليمين */
+      background: var(--accent-color); /* خلفية من اللون المميز */
+      color: #fff; /* لون النص أبيض */
+      padding: 5px 10px; /* مسافة داخلية */
+      border-radius: 15px; /* حواف دائرية */
+      font-size: 12px; /* حجم الخط */
+      font-weight: bold; /* سمك الخط */
+    }
+
+
+
+
+
+
+    /* تحسينات جديدة */
+    /* تنسيقات إشعارات التوست (رسائل منبثقة) */
+    .toast {
+      position: fixed; /* تحديد الموضع الثابت */
+      bottom: 20px; /* إزاحة من الأسفل */
+      left: 50%; /* تحديد الموضع الأيسر بنسبة 50% */
+      transform: translateX(-50%); /* إزاحة العنصر بنسبة 50% من عرضه لليمين لجعله في المنتصف تماماً */
+      background-color: #333; /* خلفية رمادية غامقة */
+      color: white; /* لون النص أبيض */
+      padding: 12px 24px; /* مسافة داخلية */
+      border-radius: 8px; /* حواف دائرية */
+      z-index: 1000; /* ترتيب طبقات العنصر */
+      opacity: 0; /* إخفاء العنصر مبدئيًا (شفافية 0) */
+      transition: opacity 0.3s ease; /* حركة انتقال عند تغيير الشفافية */
+    }
+
+    /* إظهار إشعارات التوست */
+    .toast.show {
+      opacity: 1; /* إظهار العنصر (شفافية 1) */
+    }
+
+    /* تنسيقات زر "العودة للأعلى" */
+    .back-to-top {
+      position: fixed; /* تحديد الموضع الثابت */
+      bottom: 30px; /* إزاحة من الأسفل */
+      right: 30px; /* إزاحة من اليمين */
+      background: var(--primary-color); /* خلفية من اللون الأساسي */
+      color: white; /* لون النص أبيض */
+      width: 40px; /* عرض الزر */
+      height: 40px; /* ارتفاع الزر */
+      border-radius: 50%; /* جعله دائرياً */
+      display: flex; /* استخدام Flexbox */
+      align-items: center; /* محاذاة الأيقونة عمودياً في المنتصف */
+      justify-content: center; /* محاذاة الأيقونة أفقياً في المنتصف */
+      cursor: pointer; /* تغيير مؤشر الماوس */
+      opacity: 0; /* إخفاء الزر مبدئيًا */
+      transition: opacity 0.3s; /* حركة انتقال عند تغيير الشفافية */
+      z-index: 99; /* ترتيب طبقات العنصر */
+    }
+
+    /* إظهار زر "العودة للأعلى" */
+    .back-to-top.visible {
+      opacity: 1; /* إظهار الزر */
+    }
+
+    /* تنسيقات تأثير التحميل (Skeleton loading) */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); /* تدرج لوني للخلفية */
+      background-size: 200% 100%; /* حجم الخلفية (لتحريكها لاحقًا) */
+      animation: loading 1.5s infinite; /* تطبيق حركة "loading" بشكل متكرر */
+      border-radius: 8px; /* حواف دائرية */
+    }
+
+    /* تعريف حركة التحميل (loading animation) */
+    @keyframes loading {
+      0% {
+        background-position: 200% 0; /* بدء التدرج من اليمين */
+      }
+
+      100% {
+        background-position: -200% 0; /* انتهاء التدرج من اليسار (لخلق تأثير التحميل) */
+      }
+    }
+
+    /* تنسيقات رسالة "لا توجد منتجات" */
+    .no-products {
+      grid-column: 1 / -1; /* جعل العنصر يمتد على جميع أعمدة الشبكة */
+      text-align: center; /* محاذاة النص في المنتصف */
+      padding: 40px; /* مسافة داخلية */
+      font-size: 18px; /* حجم الخط */
+      color: #777; /* لون رمادي */
+    }
+
+    /* تنسيقات تذييل الصفحة (الفوتر) */
+    footer {
+      background: #111; /* خلفية سوداء غامقة */
+      color: #fff; /* لون النص أبيض */
+      text-align: center; /* محاذاة النص في المنتصف */
+      padding: 20px; /* مسافة داخلية */
+      margin-top: 30px; /* هامش علوي */
+      display: flex; /* استخدام Flexbox */
+      flex-direction: column; /* تنظيم العناصر عمودياً */
+      gap: 10px; /* مسافة بين العناصر */
+    }
+
+    /* تنسيقات الروابط في التذييل */
+    footer a {
+      color: #fff; /* لون النص أبيض */
+      margin: 0 5px; /* هوامش جانبية */
+      font-weight: 500; /* سمك الخط */
+    }
+
+    /* تأثير عند تمرير الماوس فوق الروابط في التذييل */
+    footer a:hover {
+      color: #ccc; /* تغيير لون النص إلى رمادي فاتح */
+    }
+
+    /* ======================
+       Responsive (تنسيقات متجاوبة للشاشات المختلفة)
+    ====================== */
+    /* تنسيقات للشاشات التي لا يزيد عرضها عن 992 بكسل (الأجهزة اللوحية) */
+    @media (max-width: 992px) {
+      .header-filters {
+        flex-direction: column; /* تنظيم عناصر الفلترة عمودياً */
+        align-items: stretch; /* جعل العناصر تمتد لملء العرض */
+      }
+
+      .filters {
+        justify-content: center; /* محاذاة أزرار الفلترة في المنتصف */
+      }
+
+      .header-search-filter {
+        justify-content: center; /* محاذاة حقل البحث في المنتصف */
+      }
+    }
+
+    /* تنسيقات للشاشات التي لا يزيد عرضها عن 768 بكسل (الأجهزة اللوحية الصغيرة) */
+    @media (max-width: 768px) {
+      .header-main {
+        padding: 10px 15px; /* تقليل المسافة الداخلية للرأس الرئيسي */
+      }
+
+      .logo {
+        font-size: 24px; /* تقليل حجم خط الشعار */
+      }
+
+      #search-box {
+        width: 150px; /* تقليل عرض حقل البحث */
+        font-size: 13px; /* تقليل حجم خط حقل البحث */
+        padding: 5px 8px; /* تقليل المسافة الداخلية لحقل البحث */
+      }
+
+      #search-box:focus {
+        width: 180px; /* زيادة عرض حقل البحث عند التركيز عليه */
+      }
+
+      #loginBtn {
+        font-size: 12px; /* تقليل حجم خط زر تسجيل الدخول */
+        padding: 4px 10px; /* تقليل المسافة الداخلية لزر تسجيل الدخول */
+      }
+
+      #userIcon {
+        width: 32px; /* تقليل عرض أيقونة المستخدم */
+        height: 32px; /* تقليل ارتفاع أيقونة المستخدم */
+        font-size: 16px; /* تقليل حجم خط أيقونة المستخدم */
+      }
+
+      .header-filters {
+        padding: 10px 15px; /* تقليل المسافة الداخلية لقسم الفلترة */
+      }
+
+      .filters {
+        gap: 8px; /* تقليل المسافة بين أزرار الفلترة */
+      }
+
+      .filter-btn {
+        padding: 6px 12px; /* تقليل المسافة الداخلية لأزرار الفلترة */
+        font-size: 13px; /* تقليل حجم خط أزرار الفلترة */
+      }
+
+      .header-search-filter input {
+        width: 150px; /* تقليل عرض حقل البحث في الفلترة */
+        padding: 6px 12px; /* تقليل المسافة الداخلية لحقل البحث في الفلترة */
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* تعديل أعمدة الشبكة لمنتجات أصغر */
+        padding: 20px 15px; /* تقليل المسافة الداخلية لشبكة المنتجات */
+        gap: 15px; /* تقليل المسافة بين المنتجات */
+      }
+    }
+
+    /* تنسيقات للشاشات التي لا يزيد عرضها عن 576 بكسل (الهواتف الذكية) */
+    @media (max-width: 576px) {
+      .header-main {
+        flex-wrap: wrap; /* السماح للعناصر بالانتقال إلى سطر جديد */
+        justify-content: center; /* محاذاة العناصر في المنتصف */
+        gap: 10px; /* تقليل المسافة بين العناصر */
+      }
+
+      .logo {
+        font-size: 22px; /* تقليل حجم خط الشعار أكثر */
+        margin-bottom: 10px; /* هامش سفلي */
+        width: 100%; /* جعل الشعار يمتد على كامل العرض */
+        text-align: center; /* محاذاة الشعار في المنتصف */
+      }
+
+      .nav-actions {
+        width: 100%; /* جعل عناصر الإجراءات تمتد على كامل العرض */
+        justify-content: center; /* محاذاة عناصر الإجراءات في المنتصف */
+        flex-wrap: wrap; /* السماح للعناصر بالانتقال إلى سطر جديد */
+      }
+
+      #search-box {
+        width: 120px; /* تقليل عرض حقل البحث أكثر */
+        font-size: 12px; /* تقليل حجم خط حقل البحث أكثر */
+      }
+
+      #search-box:focus {
+        width: 140px; /* تقليل زيادة العرض عند التركيز */
+      }
+
+      .header-filters {
+        display: none; /* إخفاء قسم الفلترة بشكل افتراضي في الشاشات الصغيرة جداً */
+      }
+
+      .header-filters.active {
+        display: flex; /* إظهار قسم الفلترة عند تفعيل فئة "active" (بالـ JavaScript) */
+      }
+
+      .filter-toggle {
+        display: block; /* إظهار زر تبديل الفلتر */
+        position: absolute; /* تحديد الموضع المطلق */
+        top: 70px; /* تحديد الموضع من الأعلى */
+        left: 15px; /* تحديد الموضع من اليسار */
+        z-index: 100; /* ترتيب طبقات العنصر */
+      }
+
+      .filters {
+        flex-direction: column; /* تنظيم أزرار الفلترة عمودياً */
+        width: 100%; /* جعل أزرار الفلترة تمتد على كامل العرض */
+      }
+
+      .filter-btn {
+        width: 100%; /* جعل زر الفلترة يمتد على كامل العرض */
+        text-align: center; /* محاذاة النص في المنتصف */
+        border-radius: 8px; /* تقليل حواف الأزرار */
+      }
+
+      .header-search-filter {
+        width: 100%; /* جعل حقل البحث يمتد على كامل العرض */
+      }
+
+      .header-search-filter input {
+        width: 100%; /* جعل حقل البحث يمتد على كامل العرض */
+      }
+    }/* إلغاء أيقونة المفضلة والسلة داخل كارت المنتج */
+.product-card .fa-heart,
+.product-card .fa-cart-plus{
+  display: none !important;
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOLA | الصفحة الرئيسية</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="header-main">
+    <a href="index.html" class="logo">LOLA</a>
+    <div class="nav-actions">
+      <a href="cart.html" class="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cart-count">0</span>
+      </a>
+      <a href="favorites.html" class="wishlist-icon">
+        <i class="fas fa-heart"></i>
+        <span class="wishlist-count" id="wishlist-count">0</span>
+      </a>
+      <a href="login.html" id="loginBtn" class="login-btn">تسجيل / دخول</a>
+      <a href="profile.html" id="userIcon" style="display:none;">👤</a>
+    </div>
+  </div>
+
+  <div class="header-filters" id="headerFilters">
+    <div class="filters">
+      <button class="filter-btn active" data-category="all">الكل</button>
+      <button class="filter-btn" data-category="أحذية">أحذية</button>
+      <button class="filter-btn" data-category="ملابس">ملابس</button>
+      <button class="filter-btn" data-sort="price-asc">السعر: من الأقل للأعلى</button>
+      <button class="filter-btn" data-sort="price-desc">السعر: من الأعلى للأقل</button>
+    </div>
+    <div class="header-search-filter">
+      <input type="text" id="search-filter" placeholder="ابحث عن منتج معين...">
+    </div>
+  </div>
+  <button class="filter-toggle" id="filterToggle"><i class="fas fa-filter"></i> فلاتر</button>
+</header>
+
+<section class="products-header">
+  <h1>كل المنتجات</h1>
+  <p>تسوق تشكيلتنا الكاملة من الملابس والأحذية</p>
+</section>
+
+<main>
+  <div class="product-grid" id="product-grid">
+    <div class="skeleton-card">
+      <div class="skeleton" style="height: 200px; margin-bottom: 10px;"></div>
+      <div class="skeleton" style="height: 20px; width: 80%; margin-bottom: 10px;"></div>
+      <div class="skeleton" style="height: 15px; width: 60%;"></div>
+    </div>
+  </div>
+</main>
+
+<button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+<div id="toast" class="toast"></div>
+
+<footer>
+  <div>© 2025 XCODE جميع الحقوق محفوظة.</div>
+  <div>
+    <a href="about.html">عنّا</a> |
+    <a href="contact.html">تواصل معنا</a> |
+    <a href="privacy.html">سياسة الخصوصية</a> |
+    <a href="terms.html">شروط الاستخدام</a>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!-- الهيدر الموحد لجميع الصفحات -->
+<div class="top-bar">
+  <a href="index.html" class="logo">LOLA</a>
+  <div class="nav-actions">
+    <input type="text" id="search-box" placeholder="بحث...">
+    <div class="cart-icon" onclick="window.location.href='cart.html'">
+      🛒<span class="cart-count" id="cart-count">0</span>
+    </div>
+    <div class="wishlist-icon" onclick="window.location.href='favorites.html'">
+      ♡<span class="wishlist-count" id="wishlist-count">0</span>
+    </div>
+    <a href="javascript:void(0)" id="loginBtn" onclick="doLogin()">تسجيل / دخول</a>
+    <a href="javascript:void(0)" id="userIcon" onclick="logout()" style="display:none;">👤</a>
+  </div>
+</div>
+
+<script>
+// نظام موحد للهيدر
+const unifiedHeader = {
+  init() {
+    this.updateCounts();
+    this.updateAuthUI();
+    this.bindEvents();
+  },
+
+  updateCounts() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    
+    document.getElementById('cart-count').innerText = cart.length;
+    document.getElementById('wishlist-count').innerText = wishlist.length;
+    
+    // إخفاء العداد إذا كان صفر
+    document.getElementById('cart-count').style.display = cart.length > 0 ? 'inline-block' : 'none';
+    document.getElementById('wishlist-count').style.display = wishlist.length > 0 ? 'inline-block' : 'none';
+  },
+
+  updateAuthUI() {
+    const user = localStorage.getItem('loggedInUser');
+    const loginBtn = document.getElementById('loginBtn');
+    const userIcon = document.getElementById('userIcon');
+    
+    if (user) {
+      loginBtn.style.display = 'none';
+      userIcon.style.display = 'flex';
+      userIcon.title = `مرحباً ${user}`;
+    } else {
+      loginBtn.style.display = 'inline-block';
+      userIcon.style.display = 'none';
+    }
+  },
+
+  bindEvents() {
+    // استماع لتغييرات localStorage
+    window.addEventListener('storage', () => {
+      this.updateCounts();
+    });
+
+    // تحديث كل 5 ثواني
+    setInterval(() => {
+      this.updateCounts();
+      this.updateAuthUI();
+    }, 5000);
+  }
+};
+
+// دوال تسجيل الدخول
+function doLogin() {
+  const username = prompt("ادخل اسمك لتسجيل الدخول:");
+  if (username && username.trim() !== "") {
+    localStorage.setItem('loggedInUser', username);
+    unifiedHeader.updateAuthUI();
+  }
+}
+
+function logout() {
+  localStorage.removeItem('loggedInUser');
+  unifiedHeader.updateAuthUI();
+  alert("تم تسجيل الخروج");
+}
+
+// تهيئة الهيدر عند التحميل
+document.addEventListener('DOMContentLoaded', () => {
+  unifiedHeader.init();
+});
+</script>

@@ -1,0 +1,77 @@
+########################################
+# 🛠️ Build Configuration
+########################################
+[build]
+  command = ""             # استخدم "npm run build" لو فيه أدوات بناء
+  publish = "."            # المجلد المنشور
+
+########################################
+# ⚙️ Functions Configuration
+########################################
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  external_node_modules = ["mongoose", "mongodb"]
+
+########################################
+# 🔐 Security Headers
+########################################
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Content Security Policy (CSP)
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://www.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://lola-6ab46.firebaseapp.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com;"
+    
+    # Security Headers
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    X-XSS-Protection = "1; mode=block"
+
+########################################
+# 🌍 SEO & Performance Headers
+########################################
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=()"
+    X-Robots-Tag = "index, follow"
+    Link = "</favicon.ico>; rel=icon, </manifest.json>; rel=manifest"
+
+########################################
+# 🔄 Safe Redirects (optional)
+########################################
+# Example: Redirect HTTP to HTTPS
+[[redirects]]
+  from = "http://*"
+  to = "https://:splat"
+  status = 301
+  force = true
+
+# Example: Redirect old pages
+# [[redirects]]
+#   from = "/old-page"
+#   to = "/new-page"
+#   status = 301
+
+########################################
+# 🔓 CORS Configuration (optional)
+########################################
+# Uncomment only if you need cross-origin requests
+# [[headers]]
+#   for = "/*"
+#   [headers.values]
+#     Access-Control-Allow-Origin = "https://lola-store.netlify.app"
+#     Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+#     Access-Control-Allow-Headers = "Content-Type, Authorization"
+
+########################################
+# 🧭 Notes:
+# - HTTPS enforced by Netlify + HSTS
+# - CSP protects from XSS & Injection
+# - SEO headers boost ranking
+# - Cache improves performance
+# - Redirects ensure safe URL handling
+########################################

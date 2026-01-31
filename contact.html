@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="تواصل مع متجر LOLA. أرسل رسائلك أو اتصل بنا لأي استفسارات.">
+    <title>LOLA | تواصل معنا</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "LOLA",
+        "url": "https://lola-store.netlify.app",
+        "logo": "https://lola-store.netlify.app/assets/images/LOLA.PNG",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+20-1019073627",
+            "contactType": "customer service",
+            "availableLanguage": "Arabic"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Cairo",
+            "addressCountry": "EG"
+        },
+        "sameAs": [
+            "#",
+            "#",
+            "#"
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+   <header class="top-bar">
+        <div class="header-main">
+      <a href="index.html" class="logo">LOLA</a>
+      <div class="nav-actions">
+        <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+        </a>
+        <a href="profile.html" id="userIcon" class="profile-icon" style="display:none;" aria-label="الملف الشخصي">
+          <i class="fas fa-user-circle"></i>
+        </a>
+        <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
+          <i class="fas fa-heart"></i>
+          <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
+        </a>
+        <a href="login.html" id="loginBtn" class="login-btn" aria-label="تسجيل الدخول">
+  <i class="fas fa-user"></i>
+</a>
+
+        <a href="admin-login.html" id="adminLink" class="admin-link" style="display:none;">إدارة</a>
+      </div>
+    </div>
+    </header>
+
+    <!-- 📞 قسم تواصل معنا -->
+    <section class="hero-section">
+        <div class="hero-text">
+            <h1>تواصل معنا</h1>
+            <p>هل لديك استفسار؟ تواصل معنا وسنقوم بالرد عليك في أقرب وقت ممكن.</p>
+
+            <form class="contact-form" id="contactForm">
+                <input type="text" name="fullname" placeholder="الاسم الكامل" required>
+                <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+                <textarea name="message" placeholder="رسالتك..." rows="5" required></textarea>
+                <button type="submit">إرسال</button>
+                <p id="formMsg"></p>
+            </form>
+
+            <div class="contact-info">
+                <span><i class="fas fa-phone"></i> الخط الساخن: 01019073627</span>
+                <span><i class="fab fa-whatsapp"></i> واتساب: 01019073627</span>
+                <span><i class="fas fa-envelope"></i> البريد الإلكتروني: <a
+                        href="mailto:xcodegroup2025@gmail.com">xcodegroup2025@gmail.com</a></span>
+                <span><i class="fas fa-map-marker-alt"></i> العنوان: الشرقيه-بلبيس</span>
+                <span><i class="fas fa-clock"></i> ساعات العمل: 9 ص - 9 م</span>
+                <span><i class="fab fa-facebook"></i> <a href="#">Facebook</a></span>
+                <span><i class="fab fa-instagram"></i> <a href="https://www.instagram.com/lo.la.st/?next=%2F&hl=en">Instagram</a></span>
+                <span><i class="fab fa-twitter"></i> <a href="#">Twitter</a></span>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <img src="assets/images/LOLA.PNG" alt="اتصل بنا">
+        </div>
+    </section>
+
+
+
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script src="js/contact.js"></script>
+
+</body>
+
+</html>

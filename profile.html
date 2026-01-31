@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOLA | الملف الشخصي</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background: #f7f7f7; }
+
+    .profile-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-header { text-align: center; margin-bottom: 30px; }
+
+    .profile-avatar {
+      width: 120px; height: 120px; border-radius: 50%;
+      background: var(--primary-color); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px; margin: 0 auto 20px; overflow: hidden;
+    }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .profile-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px; margin-bottom: 30px;
+    }
+
+    .info-card {
+      background: var(--secondary-color);
+      padding: 20px; border-radius: 10px;
+      border-left: 4px solid var(--primary-color);
+    }
+    .info-card h3 { color: var(--primary-color); margin-bottom: 15px; }
+
+    .info-item { display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .info-label { font-weight: bold; }
+    .required { color: red; }
+    .warning { color: orange; font-size: 14px; margin-top: 5px; }
+
+    .stats { display: flex; flex-direction: column; gap: 10px; }
+    .stat { display: flex; align-items: center; gap: 10px; font-size: 16px; }
+    .stat i { color: var(--primary-color); }
+
+    .profile-actions { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    .action-btn {
+      padding: 12px 25px; border: 2px solid var(--primary-color);
+      background: white; color: var(--primary-color);
+      border-radius: 8px; cursor: pointer; font-weight: 600;
+      text-decoration: none; transition: 0.2s;
+    }
+    .action-btn:hover { background: var(--primary-color); color: white; }
+    .action-btn.logout { border-color: var(--accent-color); color: var(--accent-color); }
+    .action-btn.logout:hover { background: var(--accent-color); color: white; }
+
+    /* Loader */
+    #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255,255,255,0.9); display: flex;
+      align-items: center; justify-content: center; font-size: 22px;
+    }
+
+    /* Modal */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+    .modal-content { background: #fff; padding: 20px; border-radius: 10px; max-width: 400px; width: 100%; }
+    .modal-content h3 { margin-bottom: 15px; }
+    .modal-content input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 6px; }
+    .modal-content button { padding: 10px 15px; margin-top: 10px; cursor: pointer; border: none; border-radius: 6px; background: var(--primary-color); color: #fff; }
+  </style>
+</head>
+<body>
+
+<div id="loader">جارٍ تحميل بياناتك...</div>
+
+<!-- 🔝 الهيدر -->
+<div class="header-main">
+  <a href="index.html" class="logo">LOLA</a>
+    <div class="nav-actions">
+      <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+      </a>
+      <a href="profile.html" class="user-icon" aria-label="الملف الشخصي">
+        <i class="fas fa-user-circle"></i>
+      </a>
+      <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
+        <i class="fas fa-heart"></i>
+        <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
+      </a>
+    </div>
+</div>
+<main class="profile-container" style="display:none;">
+  <div class="profile-header">
+    <div class="profile-avatar" id="avatarBox" onclick="document.getElementById('photoInput').click()">👤</div>
+    <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="uploadPhoto()">
+    <h1 id="profileName">الملف الشخصي</h1>
+    <p>مرحباً بك في حسابك الشخصي</p>
+    <button class="action-btn" onclick="openModal()">✏️ تعديل البيانات</button>
+  </div>
+
+  <div class="profile-info">
+    <div class="info-card">
+      <h3>المعلومات الشخصية</h3>
+      <div class="info-item"><span class="info-label">الاسم <span class="required">*</span>:</span><span class="info-value" id="user-name">-</span></div>
+      <div id="name-warning" class="warning" style="display:none;">يرجى إدخال اسمك لإكمال الملف الشخصي</div>
+      <div class="info-item"><span class="info-label">البريد:</span><span class="info-value" id="user-email">-</span></div>
+      <div class="info-item"><span class="info-label">الهاتف <span class="required">*</span>:</span><span class="info-value" id="user-phone">-</span></div>
+      <div id="phone-warning" class="warning" style="display:none;">يرجى إدخال رقم هاتفك لإكمال الملف الشخصي</div>
+    </div>
+
+    <div class="info-card">
+      <h3>إحصائيات التسوق</h3>
+      <div class="stats">
+        <div class="stat"><i class="fas fa-shopping-bag"></i><span id="active-orders">0 طلب نشط</span></div>
+        <div class="stat"><i class="fas fa-box"></i><span id="past-orders">0 طلب سابق</span></div>
+        <div class="stat"><i class="fas fa-heart"></i><span id="fav-count">0 منتجات مفضلة</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-actions">
+    <a href="favorites.html" class="action-btn">المفضلة ♡</a>
+    <a href="cart.html" class="action-btn">سلة التسوق 🛒</a>
+    <a href="index.html" class="action-btn">مواصلة التسوق</a>
+    <button class="action-btn logout" onclick="logout()">تسجيل الخروج</button>
+  </div>
+</main>
+
+<!-- Modal لتعديل البيانات -->
+<div class="modal" id="editModal">
+  <div class="modal-content">
+    <h3>تعديل البيانات</h3>
+    <label>الاسم <span class="required">*</span>:</label>
+    <input type="text" id="editName" placeholder="الاسم">
+    <label>رقم الهاتف <span class="required">*</span>:</label>
+    <input type="text" id="editPhone" placeholder="رقم الهاتف">
+    <button onclick="saveProfile()">حفظ</button>
+    <button onclick="closeModal()" style="background:#ccc; color:#000; margin-left:10px;">إلغاء</button>
+  </div>
+</div>
+
+<footer>
+  <div>© 2025 xcode جميع الحقوق محفوظة.</div>
+  <div>
+    <a href="about.html">عنّا</a> |
+    <a href="contact.html">تواصل معنا</a> |
+    <a href="privacy.html">سياسة الخصوصية</a> |
+    <a href="Terms of Use.html">شروط الاستخدام</a>
+  </div>
+  <!-- Social Links -->
+  <div class="social-links">
+      <a href="#" target="_blank" title="Facebook">
+          <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://www.instagram.com/lo.la.st/?next=%2F&hl=en" target="_blank" title="Instagram">
+          <i class="fab fa-instagram"></i>
+      </a>
+      <a href="#" target="_blank" title="TikTok">
+          <i class="fab fa-tiktok"></i>
+      </a>
+  </div>
+</footer>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+<script>
+// نظام موحد للهيدر
+const unifiedHeader = {
+  init() {
+    this.updateCounts();
+    this.updateAuthUI();
+    this.bindEvents();
+  },
+
+  updateCounts() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    
+    document.getElementById('cart-count').innerText = cart.length;
+    document.getElementById('wishlist-count').innerText = wishlist.length;
+    
+    // إخفاء العداد إذا كان صفر
+    document.getElementById('cart-count').style.display = cart.length > 0 ? 'inline-block' : 'none';
+    document.getElementById('wishlist-count').style.display = wishlist.length > 0 ? 'inline-block' : 'none';
+  },
+
+  updateAuthUI() {
+    const user = localStorage.getItem('loggedInUser');
+    const loginBtn = document.getElementById('loginBtn');
+    const userIcon = document.getElementById('userIcon');
+    
+    if (user) {
+      loginBtn.style.display = 'none';
+      userIcon.style.display = 'flex';
+      userIcon.title = `مرحباً ${user}`;
+    } else {
+      loginBtn.style.display = 'inline-block';
+      userIcon.style.display = 'none';
+    }
+  },
+
+  bindEvents() {
+    // استماع لتغييرات localStorage
+    window.addEventListener('storage', () => {
+      this.updateCounts();
+    });
+
+    // تحديث كل 5 ثواني
+    setInterval(() => {
+      this.updateCounts();
+      this.updateAuthUI();
+    }, 5000);
+  }
+};
+
+// دوال تسجيل الدخول
+function doLogin() {
+  const username = prompt("ادخل اسمك لتسجيل الدخول:");
+  if (username && username.trim() !== "") {
+    localStorage.setItem('loggedInUser', username);
+    unifiedHeader.updateAuthUI();
+  }
+}
+
+function logout() {
+  localStorage.removeItem('loggedInUser');
+  unifiedHeader.updateAuthUI();
+  alert("تم تسجيل الخروج");
+}
+
+// تهيئة الهيدر عند التحميل
+document.addEventListener('DOMContentLoaded', () => {
+  unifiedHeader.init();
+});
+</script>
+<script type="module">
+
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyCEY3tkYgxiRRpcOLdx8gRP0uwkaD1sIJQ",
+    authDomain: "lola-6ab46.firebaseapp.com",
+    projectId: "lola-6ab46",
+    storageBucket: "lola-6ab46.appspot.com",
+    messagingSenderId: "166549966504",
+    appId: "1:166549966504:web:4f52282d3fa4a9f0eabc9d"
+  };
+// ============================
+// إعداد Firebase
+// ============================
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let currentUser = null;
+
+// ============================
+// التحقق من حالة تسجيل الدخول
+// ============================
+auth.onAuthStateChanged(async (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUser = user;
+
+  // ============================
+  // جلب بيانات المستخدم
+  // ============================
+  const userRef = db.collection("users").doc(user.uid);
+  const snap = await userRef.get();
+
+  if (snap.exists()) {
+    const data = snap.data();
+    const name = data.name || "-";
+    const phone = data.phone || "-";
+
+    document.getElementById("user-name").textContent = name;
+    document.getElementById("user-email").textContent = user.email || "-";
+    document.getElementById("user-phone").textContent = phone;
+    document.getElementById("profileName").textContent = data.name || "الملف الشخصي";
+
+    // تحذيرات النقص
+    document.getElementById("name-warning").style.display = name === "-" ? "block" : "none";
+    document.getElementById("phone-warning").style.display = phone === "-" ? "block" : "none";
+
+    // الصورة الرمزية
+    if (data.avatarUrl) {
+      document.getElementById("avatarBox").innerHTML = `<img src="${data.avatarUrl}" alt="avatar">`;
+    } else if (data.name) {
+      document.getElementById("avatarBox").textContent = data.name.substring(0, 2).toUpperCase();
+    }
+  }
+
+  // ============================
+  // الطلبات
+  // ============================
+  const q = db.collection("orders").where("userId", "==", user.uid);
+  const orders = await q.get();
+
+  let active = 0, past = 0;
+  orders.forEach(o => {
+    const d = o.data();
+    if (d.status === "جديد" || d.status === "قيد التنفيذ") active++;
+    else if (d.status) past++;
+  });
+
+  document.getElementById("active-orders").textContent = active + " طلب نشط";
+  document.getElementById("past-orders").textContent = past + " طلب سابق";
+
+  // ============================
+  // المفضلة
+  // ============================
+  let favCount = 0;
+  try {
+    const wishlistQuery = db.collection(`users/${user.uid}/wishlist`);
+    const wishlistSnap = await wishlistQuery.get();
+    favCount = wishlistSnap.size;
+  } catch (error) {
+    console.warn("خطأ في جلب المفضلة من Firestore:", error);
+    const localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    favCount = localWishlist.length;
+  }
+
+  document.getElementById("fav-count").textContent = favCount + " منتجات مفضلة";
+
+  // ============================
+  // إظهار الصفحة بعد التحميل
+  // ============================
+  document.getElementById("loader").style.display = "none";
+  document.querySelector(".profile-container").style.display = "block";
+
+  // ============================
+  // تحديث عدادات السلة والمفضلة
+  // ============================
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cartCount = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+
+  document.getElementById('cart-count').textContent = cartCount;
+  document.getElementById('cart-count').style.display = cartCount > 0 ? 'inline-block' : 'none';
+
+  document.getElementById('wishlist-count').textContent = favCount;
+  document.getElementById('wishlist-count').style.display = favCount > 0 ? 'inline-block' : 'none';
+});
+
+// ============================
+// تعديل البيانات
+// ============================
+window.openModal = function () {
+  document.getElementById("editModal").style.display = "flex";
+  document.getElementById("editName").value = document.getElementById("user-name").textContent;
+  document.getElementById("editPhone").value = document.getElementById("user-phone").textContent;
+};
+
+window.closeModal = function () {
+  document.getElementById("editModal").style.display = "none";
+};
+
+window.saveProfile = async function () {
+  const newName = document.getElementById("editName").value.trim();
+  const newPhone = document.getElementById("editPhone").value.trim();
+
+  if (newName === "" || newPhone === "") {
+    alert("يرجى ملء جميع الحقول المطلوبة");
+    return;
+  }
+  if (!currentUser) return;
+
+  const ref = db.collection("users").doc(currentUser.uid);
+  await ref.set({ name: newName, phone: newPhone }, { merge: true });
+
+  alert("تم حفظ البيانات بنجاح ✅");
+  closeModal();
+  location.reload();
+};
+
+// ============================
+// رفع الصورة الشخصية
+// ============================
+window.uploadPhoto = async function () {
+  const fileInput = document.getElementById("photoInput");
+  const file = fileInput.files[0];
+
+  if (!file || !currentUser) return;
+
+  const storage = firebase.storage();
+  const storageRef = storage.ref(`avatars/${currentUser.uid}`);
+
+  try {
+    const snapshot = await storageRef.put(file);
+    const downloadURL = await snapshot.ref.getDownloadURL();
+
+    const userRef = db.collection("users").doc(currentUser.uid);
+    await userRef.set({ avatarUrl: downloadURL }, { merge: true });
+
+    document.getElementById("avatarBox").innerHTML = `<img src="${downloadURL}" alt="avatar">`;
+    alert("تم رفع الصورة بنجاح ✅");
+  } catch (error) {
+    console.error("Error uploading photo:", error);
+    alert("فشل في رفع الصورة ❌");
+  }
+};
+
+// ============================
+// تسجيل الخروج
+// ============================
+window.logout = function () {
+  localStorage.removeItem('loggedInUser');
+  localStorage.removeItem('isLoggedIn');
+  localStorage.removeItem('userName');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('userPhone');
+  localStorage.removeItem('loginMethod');
+
+  auth.signOut().then(() => window.location.href = "index.html");
+};
+
+// ============================
+// الانتقال لصفحة تسجيل الدخول
+// ============================
+window.doLogin = function () {
+  window.location.href = "login.html";
+};
+
+</script>
+
+</body>
+</html>

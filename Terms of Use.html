@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="شروط الاستخدام لمتجر LOLA. تعرف على القواعد والشروط الخاصة باستخدام الموقع والخدمات.">
+    <title>LOLA | الشروط والخصوصية</title>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "الشروط والخصوصية",
+      "description": "شروط الاستخدام لمتجر LOLA، تغطي الخصوصية، الشحن، الاسترجاع، والمسؤوليات.",
+      "url": "https://lola-store.com/terms.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "LOLA Store",
+        "url": "https://lola-store.com"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff;
+            color: #000;
+            line-height: 1.8;
+        }
+
+        /* ===== الهيدر ===== */
+        .top-bar {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 20px;
+        }
+
+        .header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: black;
+            letter-spacing: 2px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #search-box {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: .3s;
+            outline: none;
+        }
+
+        #search-box:focus {
+            border-color: #000;
+        }
+
+        .cart-icon,
+        .wishlist-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        .cart-icon:hover,
+        .wishlist-icon:hover {
+            transform: scale(1.2);
+            color: #f0c040;
+        }
+
+        .cart-count {
+            background: var(--accent-color);
+        }
+
+        .wishlist-count {
+            background: #3498db;
+        }
+
+        .cart-count,
+        .wishlist-count {
+            position: absolute;
+            top: -5px;
+            right: -6px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .cart-icon.has-items .cart-count,
+        .wishlist-icon.has-items .wishlist-count {
+            display: flex;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #loginBtn {
+            padding: 6px 14px;
+            border: 1px solid black;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+            text-decoration: none;
+            color: black;
+        }
+
+        #loginBtn:hover {
+            background: black;
+            color: white;
+        }
+
+        #userIcon {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s;
+        }
+
+        #userIcon:hover {
+            transform: scale(1.1);
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* ===== المحتوى ===== */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            margin-bottom: 40px;
+            text-align: right; /* تعديل اتجاه النص */
+        }
+
+        section h2 {
+            font-size: 20px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        section p {
+            font-size: 15px;
+            text-align: justify;
+        }
+
+        /* ===== جدول المحتويات ===== */
+        .toc {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+            text-align: right;
+        }
+
+        .toc h2 {
+            font-size: 24px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .toc li {
+            margin-bottom: 10px;
+        }
+
+        .toc a {
+            text-decoration: none;
+            color: #000;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #f0c040;
+        }
+
+        /* ===== الفوتر ===== */
+        .footer {
+            background: #000;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #f0c040;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- الهيدر -->
+   <header class="top-bar">
+        <div class="header-main">
+      <a href="index.html" class="logo">LOLA</a>
+      <div class="nav-actions">
+        <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+        </a>
+        <a href="profile.html" id="userIcon" class="profile-icon" style="display:none;" aria-label="الملف الشخصي">
+          <i class="fas fa-user-circle"></i>
+        </a>
+        <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
+          <i class="fas fa-heart"></i>
+          <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
+        </a>
+        <a href="login.html" id="loginBtn" class="login-btn" aria-label="تسجيل الدخول">
+  <i class="fas fa-user"></i>
+</a>
+
+        <a href="admin-login.html" id="adminLink" class="admin-link" style="display:none;">إدارة</a>
+      </div>
+    </div>
+    </header>
+
+    <!-- جدول المحتويات -->
+    <div class="toc">
+        <h2>جدول المحتويات</h2>
+        <ul>
+            <li><a href="#section1">1. سياسة الخصوصية</a></li>
+            <li><a href="#section2">2. شروط الاستخدام</a></li>
+            <li><a href="#section3">3. الشحن والتوصيل</a></li>
+            <li><a href="#section4">4. الاسترجاع والاستبدال</a></li>
+            <li><a href="#section5">5. طرق الدفع</a></li>
+            <li><a href="#section6">6. الدعم الفني وخدمة العملاء</a></li>
+            <li><a href="#section7">7. الملكية الفكرية</a></li>
+            <li><a href="#section8">8. تحديد المسؤولية</a></li>
+            <li><a href="#section9">9. القانون المعمول به</a></li>
+            <li><a href="#section10">10. التحديثات على الشروط</a></li>
+        </ul>
+    </div>
+
+    <!-- المحتوى -->
+    <div class="container">
+        <section>
+            <h2 id="section1">1. سياسة الخصوصية</h2>
+            <p>نحن في LOLA نلتزم بحماية بياناتك الشخصية وتوفير تجربة تسوق آمنة وموثوقة لجميع عملائنا.</p>
+            <p>نقوم بجمع المعلومات التالية عند التسجيل أو إتمام الطلب:</p>
+            <ul>
+                <li>الاسم الكامل</li>
+                <li>البريد الإلكتروني</li>
+                <li>رقم الهاتف</li>
+                <li>عنوان التوصيل</li>
+                <li>تفاصيل الطلب مثل المنتجات، المقاسات، الكميات</li>
+            </ul>
+            <p>نستخدم بياناتك للأغراض التالية:</p>
+            <ul>
+                <li>إتمام الطلب وتوصيله لك بنجاح.</li>
+                <li>إرسال تأكيدات الطلب والتحديثات المتعلقة به.</li>
+                <li>تحسين تجربة التسوق على الموقع وعرض منتجات مناسبة لك.</li>
+                <li>الاتصال بك عند الضرورة بخصوص الطلبات أو الخدمات.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 id="section2">2. شروط الاستخدام</h2>
+            <p>باستخدامك لموقع LOLA، فإنك توافق على الالتزام بكافة القوانين المحلية وسياسات الموقع. يجب استخدام الموقع في أغراض مشروعة فقط وعدم محاولة الإضرار به أو استغلاله بشكل غير قانوني.</p>
+            <p>يُمنع عليك:</p>
+            <ul>
+                <li>استخدام الموقع لأي أغراض غير قانونية أو محظورة.</li>
+                <li>محاولة الوصول غير المصرح به إلى أنظمتنا أو بياناتنا.</li>
+                <li>نشر محتوى ضار أو مسيء.</li>
+                <li>نسخ أو توزيع محتوى الموقع دون إذن.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 id="section3">3. الشحن والتوصيل</h2>
+            <p>نقدم خدمات التوصيل لجميع الطلبات مع خيارات مرنة:</p>
+            <ul>
+                <li>توصيل سريع للطلبات داخل مصر خلال 2-5 أيام عمل.</li>
+                <li>تكاليف الشحن تُحدد حسب المنطقة والوزن.</li>
+                <li>سنقوم بإعلامك بأي تأخير محتمل عبر البريد الإلكتروني أو الهاتف.</li>
+                <li>في حالة عدم التوفر، قد يتم إلغاء الطلب واسترداد المبلغ.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 id="section4">4. الاسترجاع والاستبدال</h2>
+            <p>نقدم سياسة إرجاع واضحة لضمان رضاك:</p>
+            <ul>
+                <li>يمكنك استرجاع أو استبدال المنتج خلال 14 يوم من الاستلام.</li>
+                <li>يجب أن يكون المنتج في حالته الأصلية مع الفاتورة والتغليف.</li>
+                <li>لا يتم استرجاع المنتجات المستخدمة، التالفة، أو الملابس الداخلية.</li>
+                <li>سيتم استرداد المبلغ أو استبدال المنتج خلال 7 أيام من استلام الإرجاع.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 id="section5">5. طرق الدفع</h2>
+            <p>نوفر طرق دفع آمنة تشمل:</p>
+            <ul>
+                <li>الدفع عند الاستلام (كاش).</li>
+                <li>الدفع عبر بطاقة فيزا أو ماستركارد.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 id="section6">6. الدعم الفني وخدمة العملاء</h2>
+            <p>فريق LOLA جاهز لمساعدتك على مدار الساعة:</p>
+            <ul>
+                <li>البريد الإلكتروني: xcodegroup2025@gmail.com</li>
+                <li>الهاتف: 01019073627</li>
+                <li> الدردشة المباشرة على wahtsapp خلال ساعات العمل الرسميه لدينا  </li>
+                <li>وقت الرد: خلال 24 ساعة.</li>
+            </ul>
+        </section>
+
+
+
+        <section>
+            <h2 id="section8">8. تحديد المسؤولية</h2>
+            <p>نبذل قصارى جهدنا لضمان دقة المعلومات، لكننا لا نتحمل المسؤولية عن:</p>
+            <ul>
+                <li>أخطاء في الوصف أو الصور.</li>
+                <li>تأخيرات بسبب ظروف خارجة عن سيطرتنا.</li>
+                <li>أضرار غير مباشرة أو تبعية.</li>
+                <li>استخدام خاطئ للمنتجات.</li>
+            </ul>
+        </section>
+
+
+        <section>
+            <h2 id="section10">9. التحديثات على الشروط</h2>
+            <p>قد نقوم بتحديث هذه الشروط بين فترة وأخرى لضمان حماية أفضل للمستخدمين، وسيتم إشعارك بأي تغييرات مهمة عبر الموقع أو البريد الإلكتروني.</p>
+        </section>
+    </div>
+
+    <!-- الفوتر -->
+    <div class="footer">
+        &copy; 2025 xcode. جميع الحقوق محفوظة. |
+        <a href="index.html">الرئيسية</a> |
+        <a href="about.html">من نحن</a> |
+        <a href="contact.html">اتصل بنا</a> |
+        <a href="privacy.html">سياسة الخصوصية</a> |
+        <a href="Terms of Use.html">الشروط والأحكام</a>
+    </div>
+
+    <script>
+        // تحديث عدد العناصر في الهيدر
+        function updateHeaderCounts() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            const cartCount = document.getElementById('cart-count');
+            const wishlistCount = document.getElementById('wishlist-count');
+
+            if (cartCount) {
+                cartCount.innerText = cart.length;
+                cartCount.style.display = cart.length > 0 ? 'inline-block' : 'none';
+            }
+            if (wishlistCount) {
+                wishlistCount.innerText = wishlist.length;
+                wishlistCount.style.display = wishlist.length > 0 ? 'inline-block' : 'none';
+            }
+        }
+
+        // استدعاء الدالة عند تحميل الصفحة
+        updateHeaderCounts();
+    </script>
+
+</body>
+
+</html>
