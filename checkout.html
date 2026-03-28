@@ -79,20 +79,28 @@ a{text-decoration:none;color:inherit;}
   <div class="payment-form">
     <h2>تفاصيل الدفع</h2>
     <form id="checkoutForm">
-      <input type="text" name="fullname" placeholder="الاسم الكامل" required>
-      <input type="email" name="email" placeholder="البريد الإلكتروني" required>
-      <input type="tel" name="phone" placeholder="رقم الهاتف" required>
-      <select id="paymentChoice" name="paymentMethod" required>
+      <input type="text" name="fullname" placeholder="الاسم الكامل*" required>
+<input type="email" name="email" placeholder="البريد الإلكتروني*" required>
+<input type="tel" name="phone" placeholder="رقم الهاتف" pattern="\\+?[0-9]{10,13}" required>
+<input type="text" name="address" placeholder="عنوان التسليم الكامل*" required>
+      <select id="paymentChoice" name="paymentMethod" required onchange="togglePaymentFields()">
         <option value="" disabled selected>اختر طريقة الدفع</option>
         <option value="paymob">بطاقة / Paymob</option>
-        <option value="cash">كاش</option>
+        <option value="cash">كاش عند الاستلام</option>
       </select>
-      <button type="submit">إتمام الطلب</button>
-      <p id="successMsg">تم استلام طلبك بنجاح!</p>
+      <div id="cardFields" style="display:none;">
+        <div id="card-element" style="padding:14px;margin-bottom:18px;border:2px solid #e0e0e0;border-radius:8px;background:#fafafa;"></div>
+        <div id="card-errors" role="alert" style="color:#fa755a;font-size:14px;margin-bottom:18px;display:none;"></div>
+      </div>
+      <button type="submit" class="checkout-btn">اطلب الآن</button>
+      <p id="successMsg">✅ تم الطلب بنجاح! شكراً لتسوقك معنا</p>
     </form>
   </div>
 
 </div>
+
+<!-- Stripe SDK -->
+<script src="https://js.stripe.com/v3/"></script>
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -154,7 +162,6 @@ a{text-decoration:none;color:inherit;}
     await loadWishlistCount();
   });
 
-  // دالة لمسح السلة
   async function clearCart() {
     if (currentUser) {
       const cartRef = db.collection("users").doc(currentUser.uid).collection("cart");
@@ -198,7 +205,6 @@ a{text-decoration:none;color:inherit;}
     }
   }
 
-  // تحميل الخصم
   async function loadDiscount() {
     if (currentUser) {
       const doc = await db.collection("users").doc(currentUser.uid).get();
@@ -214,7 +220,6 @@ a{text-decoration:none;color:inherit;}
     }
   }
 
-  // تحميل السلة
   async function loadCartItems(){
     const cart = await getCartItems();
     const cartItemsContainer = document.getElementById('cartItems');
@@ -228,7 +233,7 @@ a{text-decoration:none;color:inherit;}
     }
     emptyCartMsg.style.display='none';
 
-    cart.forEach((item,index)=>{
+    cart.forEach(item=>{
       const price = parseFloat(item.price)||0;
       const quantity = item.quantity||1;
       const itemPrice = price + (item.giftWrapping ? 20 : 0);
@@ -256,10 +261,13 @@ a{text-decoration:none;color:inherit;}
       if (item.giftWrapping) itemPrice += 20;
       subtotal += itemPrice * (item.quantity||1);
     });
-    const shipping = subtotal >= 1000 ? 0 : 50;
-    const totalAfterDiscount = subtotal - discountValue;
-    const total = totalAfterDiscount + shipping;
-    updateOrderSummary(subtotal, discountValue, shipping, total);
+
+    const storedDiscount = parseFloat(localStorage.getItem('checkoutDiscount')) || discountValue;
+    const storedShipping = parseFloat(localStorage.getItem('checkoutShipping')) || calculateShipping(subtotal);
+
+    const totalAfterDiscount = subtotal - storedDiscount;
+    const total = totalAfterDiscount + storedShipping;
+    updateOrderSummary(subtotal, storedDiscount, storedShipping, total);
   }
 
   function updateOrderSummary(subtotal, discount, shipping, total){
@@ -272,9 +280,61 @@ a{text-decoration:none;color:inherit;}
   const form=document.getElementById('checkoutForm');
   const successMsg=document.getElementById('successMsg');
 
-  // حفظ الطلب
+  // Initialize Stripe once
+  const stripe = Stripe('pk_test_51ABC123...'); // Replace with your real key
+  const elements = stripe.elements();
+  const cardElement = elements.create('card');
+  let cardElementMounted = false;
+
+  function togglePaymentFields() {
+    const paymentMethod = document.getElementById('paymentChoice').value;
+    const cardFields = document.getElementById('cardFields');
+    if (paymentMethod === 'paymob') {
+      cardFields.style.display = 'block';
+      if (!cardElementMounted) {
+        cardElement.mount('#card-element');
+        cardElementMounted = true;
+      }
+    } else {
+      cardFields.style.display = 'none';
+      if (cardElementMounted) {
+        cardElement.unmount();
+        cardElementMounted = false;
+      }
+    }
+  }
+
+  function calculateShipping(subtotal) {
+    return subtotal >= 2000 ? 0 : 50;
+  }
+
+  function validateForm(form) {
+    const email = form.email.value;
+    const phone = form.phone.value;
+    if (!validateEmail(email)) {
+      alert('البريد الإلكتروني غير صحيح');
+      return false;
+    }
+    if (!validatePhone(phone)) {
+      alert('رقم الهاتف غير صحيح (يجب أن يكون رقم مصري صحيح)');
+      return false;
+    }
+    return true;
+  }
+
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  }
+
+  function validatePhone(phone) {
+    const re = /^(\\+20|0)?1[0-2,5]\d{8}$/;
+    return re.test(phone);
+  }
+
   form.addEventListener('submit', async function(e){
     e.preventDefault();
+    if (!validateForm(form)) return;
     if (!currentUser) {
       window.location.href = 'login.html';
       return;
@@ -283,11 +343,34 @@ a{text-decoration:none;color:inherit;}
     if(cart.length===0){alert('السلة فارغة. أضف منتجات قبل إكمال الطلب.');return;}
 
     const paymentMethod = form.paymentMethod.value;
+    const totalAmount = parseFloat(document.getElementById('totalAmount').textContent);
+
     if(paymentMethod === 'paymob'){
-      alert('طريقة الدفع بالفيزا ستضاف قريباً. حالياً الدفع عند الاستلام متاح فقط.');
+      // Mock payment for demo
+      alert('✅ تم الدفع بنجاح (محاكاة)');
+      // Save order
+      const orderData={
+        fullname: form.fullname.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        paymentMethod: 'stripe',
+        items: cart,
+        subtotal: document.getElementById('subtotalAmount').textContent,
+        discount: discountValue,
+        discountCode: appliedDiscountCode,
+        shipping: document.getElementById('shippingAmount').textContent,
+        total: document.getElementById('totalAmount').textContent,
+        status: "مدفوع",
+        createdAt: firebase.firestore.Timestamp.now()
+      };
+      await db.collection('orders').add(orderData);
+      successMsg.style.display='block';
+      await clearCart();
+      setTimeout(()=>{ window.location.href="index.html"; },1500);
       return;
     }
 
+    // Cash on delivery
     const orderData={
       fullname: form.fullname.value,
       email: form.email.value,
@@ -302,23 +385,11 @@ a{text-decoration:none;color:inherit;}
       status: "جديد",
       createdAt: firebase.firestore.Timestamp.now()
     };
-
-    try {
-      await db.collection('orders').add(orderData);
-      successMsg.style.display='block';
-      await clearCart();
-
-      setTimeout(()=>{
-        alert('✅ تم استلام طلبك بنجاح. الدفع عند الاستلام هو الخيار المتاح حالياً.');
-        window.location.href="index.html";
-      },1500);
-    } catch(err){
-      console.error(err);
-      alert('حدث خطأ أثناء حفظ الطلب');
-    }
+    await db.collection('orders').add(orderData);
+    successMsg.style.display='block';
+    await clearCart();
+    setTimeout(()=>{ window.location.href="index.html"; },1500);
   });
-
-  // No need for additional load here, handled in onAuthStateChanged
 </script>
 
 </body>

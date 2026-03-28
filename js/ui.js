@@ -1,16 +1,12 @@
-// Firebase is already initialized in js/header.js
-const db = firebase.firestore();
-// auth is already declared in js/header.js
-
-let currentUser = null;
-let cartItems = []; // متغير محلي للسلة
+// ============================
+// UI Module
+// ============================
 
 const cartItemsEl = document.getElementById("cartItems");
 const cartSummaryEl = document.getElementById("cartSummary");
 const wishlistCountEl = document.getElementById("wishlist-count");
 
-let appliedDiscountCode = ''; // الكود المطبق
-let usedCodes = []; // كودات الخصم المستخدمة (للمؤقتة)
+let cartItems = []; // متغير محلي للسلة
 
 // ============================
 // Toast notification system
@@ -42,72 +38,8 @@ function showToast(message, type = 'info') {
 }
 
 // ============================
-// Auth state listener
+// Loading skeletons
 // ============================
-auth.onAuthStateChanged(async user => {
-  currentUser = user;
-  if (user) {
-    await mergeCart();
-  }
-  loadCart();
-  loadWishlistCount();
-  await loadDiscount();
-});
-
-// ============================
-// Cart references
-// ============================
-function getCartRef() {
-  if (currentUser) return db.collection("users").doc(currentUser.uid).collection("cart");
-  return null;
-}
-
-async function getCartItems() {
-  if (currentUser) {
-    const snapshot = await getCartRef().get();
-    return snapshot.docs.map(doc => ({ id: doc.id, cartItemId: doc.id, ...doc.data() }));
-  } else {
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    cart = cart.map(item => ({ ...item, id: String(item.id), cartItemId: String(item.cartItemId || item.id) }));
-    return cart;
-  }
-}
-
-async function saveCartItem(itemId, item) {
-  item.id = itemId; // Ensure id is set for consistency
-  item.cartItemId = itemId; // Ensure cartItemId is set
-  if (currentUser) {
-    await getCartRef().doc(itemId).set(item);
-  } else {
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const index = cart.findIndex(i => i.cartItemId === itemId);
-    if (index > -1) cart[index] = item;
-    else cart.push(item);
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }
-}
-
-async function removeCartItem(itemId) {
-  if (currentUser) {
-    await getCartRef().doc(itemId).delete();
-  } else {
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    cart = cart.filter(i => i.cartItemId != itemId);
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }
-}
-
-async function mergeCart() {
-  const localCart = JSON.parse(localStorage.getItem('cart') || '[]');
-  if (localCart.length && currentUser) {
-    const cartRef = getCartRef();
-    for (const item of localCart) {
-      const itemId = item.cartItemId || (Date.now() + Math.random());
-      await cartRef.doc(itemId).set(item);
-    }
-    localStorage.removeItem('cart');
-  }
-}
 function showLoadingSkeletons() {
   cartItemsEl.innerHTML = `
     <div class="skeleton-cart-item">
@@ -129,7 +61,9 @@ function showLoadingSkeletons() {
   `;
 }
 
-
+// ============================
+// Load cart
+// ============================
 async function loadCart() {
   showLoadingSkeletons();
   try {
@@ -141,6 +75,9 @@ async function loadCart() {
   }
 }
 
+// ============================
+// Display cart
+// ============================
 function displayCart(cart) {
   if (!cart.length) {
     cartItemsEl.innerHTML = `
@@ -156,19 +93,22 @@ function displayCart(cart) {
     return;
   }
 
+  // Use document fragment for better performance
+  const fragment = document.createDocumentFragment();
+
   // Add Clear Cart button
   const clearCartBtn = document.createElement("button");
   clearCartBtn.className = "clear-cart-btn";
   clearCartBtn.innerHTML = "🗑 مسح السلة";
   clearCartBtn.onclick = clearCart;
-  cartItemsEl.appendChild(clearCartBtn);
+  fragment.appendChild(clearCartBtn);
 
   cart.forEach(item => {
     const div = document.createElement("div");
     div.className = "cart-item";
     div.dataset.itemId = item.cartItemId;
     div.innerHTML = `
-      <img src="${item.image}" alt="${item.name}">
+      <img src="${item.image}" alt="${item.name}" loading="lazy">
       <div class="item-details">
         <h3>${item.name}</h3>
         <p>اللون: ${item.color || "-"}</p>
@@ -190,8 +130,10 @@ function displayCart(cart) {
         <button class="remove-btn" onclick="removeFromCart('${item.cartItemId}', this)">🗑 حذف</button>
       </div>
     `;
-    cartItemsEl.appendChild(div);
+    fragment.appendChild(div);
   });
+
+  cartItemsEl.appendChild(fragment);
 
   updateCartSummary(cart);
   updateCartCount();
@@ -201,12 +143,8 @@ function displayCart(cart) {
 // Cart summary
 // ============================
 function updateCartSummary(cart) {
-  let subtotal = cart.reduce((sum, item) => {
-    let itemPrice = item.price;
-    if (item.giftWrapping) itemPrice += 20; // Add gift wrapping cost
-    return sum + itemPrice * item.quantity;
-  }, 0);
-  const shipping = subtotal >= 2000 ? 0 : 50;
+  const subtotal = calculateSubtotal(cart);
+  const shipping = calculateShipping(subtotal);
   const totalAfterDiscount = subtotal - discountValue;
   const finalTotal = totalAfterDiscount + shipping;
 
@@ -236,7 +174,7 @@ function debounce(func, wait) {
 }
 
 // ============================
-// Handle minus button click
+// Handle quantity changes
 // ============================
 function handleMinus(itemId, btn) {
   const itemDiv = btn.closest('.cart-item');
@@ -249,9 +187,6 @@ function handleMinus(itemId, btn) {
   }
 }
 
-// ============================
-// Handle plus button click
-// ============================
 function handlePlus(itemId, btn) {
   const itemDiv = btn.closest('.cart-item');
   const qtyDisplay = itemDiv.querySelector('.quantity-display');
@@ -298,41 +233,7 @@ async function removeFromCart(itemId, btn) {
 }
 
 // ============================
-// Add to cart
-// ============================
-async function addToCart(product) {
-  try {
-    const itemId = product.id || (Date.now() + Math.random());
-    cartItems = await getCartItems();
-    const existingItem = cartItems.find(item => item.id == product.id);
-
-    if (existingItem) {
-      // Update quantity if product already exists
-      existingItem.quantity += product.quantity || 1;
-      await saveCartItem(existingItem.cartItemId, existingItem);
-    } else {
-      // Add new product
-      const newItem = {
-        ...product,
-        cartItemId: itemId,
-        quantity: product.quantity || 1
-      };
-      await saveCartItem(itemId, newItem);
-    }
-
-    // Update cart display immediately
-    cartItems = await getCartItems();
-    displayCart(cartItems);
-    updateCartCount();
-    showToast('تم إضافة المنتج للسلة بنجاح', 'success');
-  } catch (error) {
-    console.error('Error adding to cart:', error);
-    showToast('خطأ في إضافة المنتج للسلة', 'error');
-  }
-}
-
-// ============================
-// Checkout (Redirect to checkout page)
+// Checkout
 // ============================
 async function checkout() {
   const cart = await getCartItems();
@@ -341,18 +242,13 @@ async function checkout() {
     return;
   }
 
+  // Pass cart data to checkout
+  localStorage.setItem('checkoutCart', JSON.stringify(cart));
+  localStorage.setItem('checkoutDiscount', discountValue);
+  localStorage.setItem('checkoutShipping', calculateShipping(calculateSubtotal(cart)));
+
   // الانتقال لصفحة إنهاء الطلب
   window.location.href = "checkout.html";
-}
-
-
-// ============================
-// Update cart count
-// ============================
-async function updateCartCount() {
-  const cart = await getCartItems();
-  const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-  document.getElementById("cart-count").innerText = count;
 }
 
 // ============================
@@ -375,7 +271,7 @@ async function getWishlistItems() {
 async function loadWishlistCount() {
   const wishlist = await getWishlistItems();
   const count = wishlist.length;
-  wishlistCountEl.innerText = count > 0 ? count : "";
+  if (wishlistCountEl) wishlistCountEl.innerText = count > 0 ? count : "";
 }
 
 async function saveWishlistItem(itemId, item) {
@@ -435,128 +331,16 @@ async function saveForLater(itemId, btn) {
   }
 }
 
-// ============================
-// Clear cart
-// ============================
-async function clearCart() {
-  if (!confirm('هل أنت متأكد من مسح جميع المنتجات من السلة؟')) return;
-
-  try {
-    if (currentUser) {
-      const cartRef = getCartRef();
-      const snapshot = await cartRef.get();
-      const batch = db.batch();
-      snapshot.docs.forEach(doc => batch.delete(doc.ref));
-      await batch.commit();
-    } else {
-      localStorage.removeItem('cart');
-    }
-    discountValue = 0; // Reset discount
-    appliedDiscountCode = '';
-    saveDiscount();
-    showToast('تم مسح السلة بنجاح', 'success');
-    loadCart();
-    updateCartCount();
-  } catch (error) {
-    console.error('Error clearing cart:', error);
-    showToast('خطأ في مسح السلة', 'error');
-  }
-}
-
-// ============================
-// Apply discount code
-// ============================
-const permanentCodes = {
-  'SAVE10': 0.10, // 10% discount - دائم
-  'LOLA30': 0.30, // 30% - دائم
-  'VIP35': 0.35   // 35% - دائم
-};
-
-const oneTimeCodes = {
-  'WELCOME20': 0.20,     // 20% - لمرة واحدة
-  'FIRSTBUY15': 0.15,    // 15% - لمرة واحدة
-  'BLACKFRIDAY50': 0.50, // 50% - لمرة واحدة
-  'SUMMER25': 0.25,      // 25% - لمرة واحدة
-  'NEWYEAR40': 0.40,     // 40% - لمرة واحدة
-  'FLASH5': 0.05         // 5% - لمرة واحدة
-};
-
-async function applyDiscount() {
-  const code = document.getElementById('discountCode').value.trim().toUpperCase();
-  const messageEl = document.getElementById('discountMessage');
-
-  if (permanentCodes[code]) {
-    const cart = await getCartItems();
-    const subtotal = cart.reduce((sum, item) => {
-      let itemPrice = item.price;
-      if (item.giftWrapping) itemPrice += 20; // Add gift wrapping cost
-      return sum + itemPrice * item.quantity;
-    }, 0);
-    discountValue = subtotal * permanentCodes[code];
-    appliedDiscountCode = code;
-    saveDiscount();
-    messageEl.textContent = `تم تطبيق خصم ${permanentCodes[code] * 100}% بنجاح! (كود دائم)`;
-    messageEl.className = 'discount-message success';
-    loadCart(); // Recalculate totals
-  } else if (oneTimeCodes[code]) {
-    if (usedCodes.includes(code)) {
-      messageEl.textContent = 'هذا الكود مستخدم بالفعل ولا يمكن استخدامه مرة أخرى';
-      messageEl.className = 'discount-message error';
-      return;
-    }
-    const cart = await getCartItems();
-    const subtotal = cart.reduce((sum, item) => {
-      let itemPrice = item.price;
-      if (item.giftWrapping) itemPrice += 20; // Add gift wrapping cost
-      return sum + itemPrice * item.quantity;
-    }, 0);
-    discountValue = subtotal * oneTimeCodes[code];
-    appliedDiscountCode = code;
-    usedCodes.push(code);
-    saveDiscount();
-    messageEl.textContent = `تم تطبيق خصم ${oneTimeCodes[code] * 100}% بنجاح! (كود لمرة واحدة)`;
-    messageEl.className = 'discount-message success';
-    loadCart(); // Recalculate totals
-  } else {
-    discountValue = 0;
-    appliedDiscountCode = '';
-    saveDiscount();
-    messageEl.textContent = 'كود الخصم غير صحيح';
-    messageEl.className = 'discount-message error';
-    loadCart();
-  }
-}
-
-// ============================
-// Persist discount
-// ============================
-function saveDiscount() {
-  if (currentUser) {
-    // For Firebase, save in user doc
-    db.collection("users").doc(currentUser.uid).set({ discountValue, appliedDiscountCode, usedCodes }, { merge: true });
-  } else {
-    localStorage.setItem('discountValue', discountValue);
-    localStorage.setItem('appliedDiscountCode', appliedDiscountCode);
-    localStorage.setItem('usedCodes', JSON.stringify(usedCodes));
-  }
-}
-
-async function loadDiscount() {
-  if (currentUser) {
-    const doc = await db.collection("users").doc(currentUser.uid).get();
-    if (doc.exists) {
-      discountValue = doc.data().discountValue || 0;
-      appliedDiscountCode = doc.data().appliedDiscountCode || '';
-      usedCodes = doc.data().usedCodes || [];
-    }
-  } else {
-    discountValue = parseFloat(localStorage.getItem('discountValue')) || 0;
-    appliedDiscountCode = localStorage.getItem('appliedDiscountCode') || '';
-    usedCodes = JSON.parse(localStorage.getItem('usedCodes') || '[]');
-  }
-  // Set the input field
-  const discountInput = document.getElementById('discountCode');
-  if (discountInput) discountInput.value = appliedDiscountCode;
-}
-
-
+// Export functions
+window.showToast = showToast;
+window.loadCart = loadCart;
+window.displayCart = displayCart;
+window.updateCartSummary = updateCartSummary;
+window.handleMinus = handleMinus;
+window.handlePlus = handlePlus;
+window.updateQty = updateQty;
+window.removeFromCart = removeFromCart;
+window.checkout = checkout;
+window.loadWishlistCount = loadWishlistCount;
+window.moveToWishlist = moveToWishlist;
+window.saveForLater = saveForLater;

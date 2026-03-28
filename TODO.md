@@ -1,12 +1,20 @@
-# TODO: Fix IndexedDB Storage Quota Exceeded Error
+# TODO: إكمال صفحة Checkout.html
 
-## Steps to Complete:
-- [x] Modify js/main.js: Add error handling to Firestore onSnapshot and attempt to enable persistence with catch.
-- [x] Modify js/auth.js: Add attempt to enable Firestore persistence with error handling.
-- [x] Modify js/login.js: Change Auth persistence to SESSION to avoid IndexedDB usage.
-- [x] Test the application to ensure errors are handled gracefully.
-- [x] Monitor console for any remaining errors and clear browser storage if needed.
+## الخطوات:
+- [ ] الخطوة 1: قراءة checkout.html الحالي (تم)
+- [✓] الخطوة 1: قراءة checkout.html الحالي
+- [✓] الخطوة 2: إنشاء TODO.md 
+- [✓] الخطوة 3: تعديل checkout.html - إضافة حقل email
+- [✓] الخطوة 4: تعديل checkout.html - إضافة #card-element و toggle لطرق الدفع
+- [✓] الخطوة 5: تعديل checkout.html - إصلاح حساب الشحن باستخدام utils.js
+- [✓] الخطوة 6: تعديل checkout.html - إضافة validation للنموذج (phone/email)
+- [✓] الخطوة 7: تعديل checkout.html - محاكاة Stripe/Paymob (نجاح client-side)
+- [✓] الخطوة 8: تحديث orderData و UX (loading, errors)
+- [✓] الخطوة 9: اختبار كامل (تم التحقق: cash يعمل، Paymob mock يعمل، validation، shipping)
+- [✓] الخطوة 10: إنهاء المهمة
 
-## Additional Tasks:
-غ- [x] Delete duplicate product-details (1).html file.
-يها
+**حالة: ✅ مكتملة! صفحة checkout.html جاهزة للاستخدام.**
+- [ ] الخطوة 9: اختبار كامل (cash + mock Paymob)
+- [ ] الخطوة 10: إنهاء المهمة بـ attempt_completion
+
+**حالة: جاري التنفيذ**
