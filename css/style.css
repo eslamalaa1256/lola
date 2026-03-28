@@ -631,7 +631,8 @@ footer {
 
 /* UI Polish: Images */
 img {
-  loading: lazy;
+  max-width: 100%;
+  height: auto;
 }
 
 /* Prominent CTAs */
