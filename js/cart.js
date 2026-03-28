@@ -278,6 +278,40 @@ async function removeFromCart(itemId, btn) {
 }
 
 // ============================
+// Add to cart
+// ============================
+async function addToCart(product) {
+  try {
+    const itemId = product.id || (Date.now() + Math.random());
+    cartItems = await getCartItems();
+    const existingItem = cartItems.find(item => item.id == product.id);
+
+    if (existingItem) {
+      // Update quantity if product already exists
+      existingItem.quantity += product.quantity || 1;
+      await saveCartItem(existingItem.cartItemId, existingItem);
+    } else {
+      // Add new product
+      const newItem = {
+        ...product,
+        cartItemId: itemId,
+        quantity: product.quantity || 1
+      };
+      await saveCartItem(itemId, newItem);
+    }
+
+    // Update cart display immediately
+    cartItems = await getCartItems();
+    displayCart(cartItems);
+    updateCartCount();
+    showToast('تم إضافة المنتج للسلة بنجاح', 'success');
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    showToast('خطأ في إضافة المنتج للسلة', 'error');
+  }
+}
+
+// ============================
 // Checkout (Redirect to checkout page)
 // ============================
 async function checkout() {
