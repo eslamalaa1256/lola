@@ -1,7 +1,8 @@
-// Firebase Auth Manager - Unified Authentication Handling
-// This file centralizes all authentication logic to avoid duplication
+// ============================
+// Firebase Auth Manager - Fixed & Improved
+// ============================
 
-// Firebase is initialized in HTML files
+// Firebase already initialized in HTML
 const auth = firebase.auth();
 const db = firebase.firestore();
 
@@ -12,52 +13,37 @@ let currentUser = null;
 // Update UI based on auth state
 // ============================
 function updateAuthUI() {
-  console.log("updateAuthUI called, currentUser:", currentUser);
   const loginBtn = document.getElementById("loginBtn");
   const userIcon = document.getElementById("userIcon");
   const adminLink = document.getElementById("adminLink");
 
-  if (currentUser) {
-    // User is logged in - show profile icon, hide login button
-    console.log("Showing profile icon, hiding login button");
-    if (loginBtn) loginBtn.style.display = "none";
-    if (userIcon) userIcon.style.display = "inline-block";
+  if (!loginBtn || !userIcon) return;
 
-    // Check if admin
+  if (currentUser) {
+    // User logged in
+    loginBtn.style.display = "none";
+    userIcon.style.display = "inline-block";
+
+    // Admin link
     const userRole = localStorage.getItem("userRole") || "user";
-    if (adminLink && userRole === "admin") {
-      adminLink.style.display = "inline-block";
-    } else if (adminLink) {
-      adminLink.style.display = "none";
-    }
+    if (adminLink) adminLink.style.display = userRole === "admin" ? "inline-block" : "none";
   } else {
-    // User is not logged in - show login button, hide profile icon
-    console.log("Showing login button, hiding profile icon");
-    if (loginBtn) loginBtn.style.display = "inline-block";
-    if (userIcon) userIcon.style.display = "none";
+    // User logged out
+    loginBtn.style.display = "inline-block";
+    userIcon.style.display = "none";
     if (adminLink) adminLink.style.display = "none";
   }
 }
 
 // ============================
-// Handle successful authentication
+// Handle successful login
 // ============================
 function onAuthSuccess(method, user) {
-  let email = "";
-  let name = "";
-  let phone = "";
+  currentUser = user; // <-- crucial
+  const email = user.email || "";
+  const phone = user.phoneNumber || "";
+  const name = user.displayName || user.phoneNumber || email || "مستخدم";
 
-  if (typeof user === "string") {
-    // Phone authentication case
-    phone = user;
-    name = user;
-  } else {
-    email = user.email || "";
-    phone = user.phoneNumber || "";
-    name = user.displayName || user.phoneNumber || email || "مستخدم";
-  }
-
-  // Store user data in localStorage
   const userData = {
     name,
     email,
@@ -67,6 +53,7 @@ function onAuthSuccess(method, user) {
     lastLogin: new Date().toISOString()
   };
 
+  // Save locally
   localStorage.setItem("loggedIn", "true");
   localStorage.setItem("loggedInUser", JSON.stringify(userData));
   localStorage.setItem("loginMethod", method);
@@ -74,15 +61,14 @@ function onAuthSuccess(method, user) {
   localStorage.setItem("userPhone", phone);
   localStorage.setItem("userName", name);
 
-  // Optionally save to Firestore
+  // Save to Firestore
   if (user.uid) {
-    db.collection('users').doc(user.uid).set(userData, { merge: true }).catch(() => {});
+    db.collection('users').doc(user.uid).set(userData, { merge: true }).catch(console.error);
   }
 
-  // Update UI
   updateAuthUI();
 
-  // Redirect if needed
+  // Redirect after login
   const redirect = localStorage.getItem("redirectAfterLogin") || "index.html";
   localStorage.removeItem("redirectAfterLogin");
   if (window.location.pathname.includes("login.html") || window.location.pathname.includes("register.html")) {
@@ -91,26 +77,23 @@ function onAuthSuccess(method, user) {
 }
 
 // ============================
-// Logout function
+// Logout
 // ============================
 function logout() {
-  // Clear localStorage
   localStorage.removeItem("loggedIn");
   localStorage.removeItem("userName");
   localStorage.removeItem("userRole");
   localStorage.removeItem("loggedInUser");
-  localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("userEmail");
   localStorage.removeItem("userPhone");
   localStorage.removeItem("loginMethod");
 
-  // Sign out from Firebase
   auth.signOut().then(() => {
     currentUser = null;
     updateAuthUI();
     location.reload();
-  }).catch((error) => {
-    console.error("Error signing out:", error);
+  }).catch((err) => {
+    console.error("Logout error:", err);
     currentUser = null;
     updateAuthUI();
     location.reload();
@@ -121,17 +104,10 @@ function logout() {
 // Firebase Auth State Listener
 // ============================
 auth.onAuthStateChanged((user) => {
-  console.log("Auth state changed:", user ? "logged in" : "logged out", user);
   currentUser = user;
-
   if (user) {
-    // User signed in
-    console.log("User logged in:", user.email || user.phoneNumber);
     onAuthSuccess(localStorage.getItem("loginMethod") || "unknown", user);
   } else {
-    // User signed out
-    console.log("User logged out");
-    currentUser = null;
     updateAuthUI();
   }
 });
@@ -140,27 +116,21 @@ auth.onAuthStateChanged((user) => {
 // Initialize on page load
 // ============================
 document.addEventListener("DOMContentLoaded", async () => {
-  // محاولة تفعيل استمرارية Firestore
+  // Enable Firestore persistence
   try {
     await db.enablePersistence();
-    console.log("تم تفعيل استمرارية Firestore في auth.js");
+    console.log("Firestore persistence enabled");
   } catch (err) {
-    if (err.code === 'failed-precondition') {
-      console.warn("فشل استمرارية Firestore في auth.js: علامات تبويب متعددة مفتوحة");
-    } else if (err.code === 'unimplemented') {
-      console.warn("استمرارية Firestore غير مدعومة في auth.js");
-    } else {
-      console.error("خطأ في تفعيل استمرارية Firestore في auth.js:", err);
-    }
+    console.warn("Firestore persistence failed:", err.message);
   }
 
-  // Check if already logged in via localStorage (for persistence)
+  // Restore logged in user from localStorage
   const loggedInUser = localStorage.getItem("loggedInUser");
   if (loggedInUser && !currentUser) {
     try {
       const userData = JSON.parse(loggedInUser);
-      // This will trigger the auth state change if Firebase confirms
-    } catch (e) {
+      currentUser = userData;
+    } catch {
       localStorage.removeItem("loggedInUser");
     }
   }
@@ -169,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // ============================
-// Export functions for global use
+// Export functions globally
 // ============================
 window.logout = logout;
 window.updateAuthUI = updateAuthUI;
