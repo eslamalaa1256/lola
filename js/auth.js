@@ -66,3 +66,22 @@ auth.onAuthStateChanged((user) => {
 document.addEventListener("DOMContentLoaded", () => {
   updateAuthUI();
 });
+
+// ====================
+// User icon click handler
+// ====================
+const userIcon = document.getElementById("userIcon");
+if (userIcon) {
+  userIcon.addEventListener("click", (e) => {
+    if (currentUser) {
+      window.location.href = "profile.html";
+    } else {
+      window.location.href = "login.html";
+    }
+  });
+}
+
+auth.onAuthStateChanged((user) => {
+  currentUser = user;
+  // ... rest unchanged
+});
