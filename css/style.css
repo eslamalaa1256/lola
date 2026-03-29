@@ -114,7 +114,10 @@
     }
 
     /* تنسيقات زر تسجيل الدخول */
-    #loginBtn {
+    .login-btn, #loginBtn {
+      display: flex !important;
+      align-items: center;
+      gap: 0.5rem;
       padding: 6px 14px; /* مسافة داخلية */
       border: 1px solid black; /* حدود سوداء */
       border-radius: 20px; /* حواف دائرية */

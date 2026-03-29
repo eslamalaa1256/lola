@@ -14,7 +14,7 @@ function updateAuthUI() {
   if (currentUser) {
     // المستخدم مسجل دخول
     if (loginBtn) loginBtn.style.display = "none";
-    if (userIcon) userIcon.style.display = "inline-block";
+    if (userIcon) userIcon.style.display = "flex";
     if (logoutBtn) logoutBtn.style.display = "inline-block";
 
     const userRole = localStorage.getItem("userRole") || "user";
