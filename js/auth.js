@@ -46,6 +46,23 @@ function logout() {
 document.getElementById("logoutBtn")?.addEventListener("click", logout);
 
 // ====================
+// User icon click handler
+// ====================
+function setupUserIconClick() {
+  const userIcon = document.getElementById("userIcon");
+  if (userIcon) {
+    userIcon.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (currentUser) {
+        window.location.href = "profile.html";
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+  }
+}
+
+// ====================
 // مراقبة حالة Firebase Auth
 // ====================
 auth.onAuthStateChanged((user) => {
@@ -58,6 +75,7 @@ auth.onAuthStateChanged((user) => {
     localStorage.removeItem("userRole");
   }
   updateAuthUI();
+  setupUserIconClick(); // Setup click after elements exist
 });
 
 // ====================
@@ -65,20 +83,5 @@ auth.onAuthStateChanged((user) => {
 // ====================
 document.addEventListener("DOMContentLoaded", () => {
   updateAuthUI();
+  setupUserIconClick();
 });
-
-// ====================
-// User icon click handler
-// ====================
-const userIcon = document.getElementById("userIcon");
-if (userIcon) {
-  userIcon.addEventListener("click", (e) => {
-    if (currentUser) {
-      window.location.href = "profile.html";
-    } else {
-      window.location.href = "login.html";
-    }
-  });
-}
-
-
