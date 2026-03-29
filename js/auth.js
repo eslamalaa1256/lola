@@ -81,7 +81,4 @@ if (userIcon) {
   });
 }
 
-auth.onAuthStateChanged((user) => {
-  currentUser = user;
-  // ... rest unchanged
-});
+
