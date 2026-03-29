@@ -84,47 +84,55 @@
 <body>
   <!-- الشريط العلوي -->
   <header class="top-bar">
-    <div class="header-main">
-        <a href="index.html" class="logo">LOLA</a>
-        <div class="nav-actions">
-          <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="cart-count" id="cart-count" aria-live="polite">0</span>
-          </a>
-          <a href="profile.html" id="userIcon" class="profile-icon" style="display:none;" aria-label="الملف الشخصي">
-            <i class="fas fa-user-circle"></i>
-          </a>
-          <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
-            <i class="fas fa-heart"></i>
-            <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
-          </a>
-          <a href="login.html" id="loginBtn" class="login-btn" aria-label="تسجيل الدخول">
-    <i class="fas fa-user"></i>
-  </a>
-  
-          <a href="admin-login.html" id="adminLink" class="admin-link" style="display:none;">إدارة</a>
-        </div>
-      </div>
-  
+  <div class="header-main">
+    <a href="index.html" class="logo">LOLA</a>
+    <div class="nav-actions">
+      <a href="cart.html" class="cart-icon" aria-label="سلة التسوق">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+      </a>
 
-    <div class="header-filters" id="headerFilters" role="region" aria-label="فلاتر المنتجات">
-      <div class="filters" role="list">
-        <button class="filter-btn active" data-category="all" role="listitem" aria-pressed="true">الكل</button>
-        <button class="filter-btn" data-category="أحذية" role="listitem" aria-pressed="false">أحذية</button>
-        <button class="filter-btn" data-category="ملابس" role="listitem" aria-pressed="false">ملابس</button>
-        <button class="filter-btn" data-category="اكسسوارات" role="listitem" aria-pressed="false">اكسسوارات</button>
-        <button class="filter-btn" data-sort="price-asc" role="listitem" aria-pressed="false">السعر: من الأقل للأعلى</button>
-        <button class="filter-btn" data-sort="price-desc" role="listitem" aria-pressed="false">السعر: من الأعلى للأقل</button>
-      </div>
-      <div class="header-search-filter">
-        <input type="search" id="search-filter" placeholder="ابحث عن منتج معين..." aria-label="بحث عن منتج" />
-      </div>
+      <!-- أيقونة البروفايل -->
+      <a href="profile.html" id="userIcon" class="profile-icon" style="display:none;" aria-label="الملف الشخصي">
+        <i class="fas fa-user-circle"></i>
+      </a>
+
+      <a href="wishlist.html" class="wishlist-icon" aria-label="قائمة المفضلة">
+        <i class="fas fa-heart"></i>
+        <span class="wishlist-count" id="wishlist-count" aria-live="polite">0</span>
+      </a>
+
+      <!-- زر تسجيل الدخول -->
+      <a href="login.html" id="loginBtn" class="login-btn" aria-label="تسجيل الدخول">
+        <i class="fas fa-user"></i>
+      </a>
+
+      <!-- رابط إدارة (Admin) -->
+      <a href="admin-login.html" id="adminLink" class="admin-link" style="display:none;">إدارة</a>
+
+      <!-- زر تسجيل الخروج -->
+      <button id="logoutBtn" style="display:none;">خروج</button>
     </div>
+  </div>
 
-    <button class="filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="headerFilters">
-      <i class="fas fa-filter"></i> فلاتر
-    </button>
-  </header>
+  <div class="header-filters" id="headerFilters" role="region" aria-label="فلاتر المنتجات">
+    <div class="filters" role="list">
+      <button class="filter-btn active" data-category="all" role="listitem" aria-pressed="true">الكل</button>
+      <button class="filter-btn" data-category="أحذية" role="listitem" aria-pressed="false">أحذية</button>
+      <button class="filter-btn" data-category="ملابس" role="listitem" aria-pressed="false">ملابس</button>
+      <button class="filter-btn" data-category="اكسسوارات" role="listitem" aria-pressed="false">اكسسوارات</button>
+      <button class="filter-btn" data-sort="price-asc" role="listitem" aria-pressed="false">السعر: من الأقل للأعلى</button>
+      <button class="filter-btn" data-sort="price-desc" role="listitem" aria-pressed="false">السعر: من الأعلى للأقل</button>
+    </div>
+    <div class="header-search-filter">
+      <input type="search" id="search-filter" placeholder="ابحث عن منتج معين..." aria-label="بحث عن منتج" />
+    </div>
+  </div>
+
+  <button class="filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="headerFilters">
+    <i class="fas fa-filter"></i> فلاتر
+  </button>
+</header>
 
   <!-- Hero Section -->
   <section class="hero-section">
